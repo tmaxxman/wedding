@@ -27,7 +27,7 @@
     /* Better mobile viewport handling */
     @media (max-width: 600px) {
       body {
-        padding-top: 20vh;
+        /* Keep original positioning by default - only adjust via JS when keyboard opens */
         min-height: 100dvh; /* Use dynamic viewport height on mobile */
         overflow-y: auto; /* Allow scrolling when keyboard appears */
         -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
@@ -585,6 +585,7 @@
       const input = document.getElementById('passwordInput');
       const passwordPage = document.getElementById('passwordPage');
       const body = document.body;
+      const originalPaddingTop = getComputedStyle(body).paddingTop; // Store original value
       
       // Use Visual Viewport API if available (modern mobile browsers)
       if (window.visualViewport) {
@@ -603,7 +604,8 @@
               });
             }, 100);
           } else {
-            body.style.paddingTop = '20vh'; // Reset when keyboard closes
+            // Reset to original positioning when keyboard closes
+            body.style.paddingTop = '';
           }
         };
         
@@ -613,10 +615,10 @@
         // Clean up listener when input loses focus
         input.addEventListener('blur', () => {
           window.visualViewport.removeEventListener('resize', adjustForKeyboard);
-          body.style.paddingTop = '20vh';
+          body.style.paddingTop = ''; // Reset to original CSS value
         }, { once: true });
       } else {
-        // Fallback for older browsers - scroll into view
+        // Fallback for older browsers - scroll into view without changing padding
         setTimeout(() => {
           input.scrollIntoView({ 
             behavior: 'smooth', 
