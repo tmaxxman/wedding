@@ -29,6 +29,8 @@
       body {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        min-height: 150vh; /* Extra height so page can scroll up when keyboard opens */
+        padding-bottom: 50vh;
       }
     }
     
@@ -397,7 +399,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v8"
+          placeholder="Enter password v9"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
