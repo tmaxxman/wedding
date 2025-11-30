@@ -399,7 +399,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v10"
+          placeholder="Enter password v11"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -414,7 +414,7 @@
   </div>
 
   <script>
-    // Mobile: Lock video height to prevent resize when keyboard opens
+    // Mobile: Lock heights to pixels to prevent shift when keyboard opens
     (function() {
       const isMobile = window.innerWidth <= 768;
       if (isMobile) {
@@ -422,9 +422,12 @@
         const video = document.querySelector('.video-background');
         const videoEl = document.querySelector('.video-background video');
         
-        // Lock to initial height immediately
+        // Lock video to initial height
         if (video) video.style.height = initialHeight + 'px';
         if (videoEl) videoEl.style.height = initialHeight + 'px';
+        
+        // Lock body padding-top to pixels (was calc(58vh - 50px))
+        document.body.style.paddingTop = (initialHeight * 0.58 - 50) + 'px';
       }
     })();
     
