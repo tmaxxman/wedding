@@ -399,7 +399,7 @@
           class="password-input"
           placeholder="Enter password"
           oninput="checkPasswordAsYouType()"
-          onkeypress="if(event.key === 'Enter') checkPassword()"
+          onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
           onfocus="handleInputFocus()"
         />
       </div>
@@ -506,8 +506,14 @@
     }
     
     async function checkPassword() {
-      const password = document.getElementById('passwordInput').value;
+      const passwordInput = document.getElementById('passwordInput');
+      const password = passwordInput.value;
       const errorMsg = document.getElementById('errorMessage');
+      
+      // Don't check if input is disabled (already granted access)
+      if (passwordInput.disabled) {
+        return;
+      }
       
       if (!password) {
         return;
@@ -557,7 +563,8 @@
         }, 500);
       } else {
         // Only show error if password seems substantial (likely complete)
-        if (password.length >= 8) {
+        // But don't show error if input is already disabled (access granted)
+        if (password.length >= 8 && !passwordInput.disabled) {
           errorMsg.textContent = 'Incorrect password';
           // Clear after showing error briefly
           setTimeout(() => {
