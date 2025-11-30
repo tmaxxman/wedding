@@ -404,7 +404,7 @@
           type="password" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password"
+          placeholder="Enter password v0"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
           onfocus="handleInputFocus()"
@@ -637,28 +637,46 @@
       const body = document.body;
       let resizeTimer = null; // Debounce resize events
       
-      // Lock scroll position to prevent automatic scrolling
+      // Lock scroll position to prevent automatic scrolling (handles autocomplete bar too)
       let scrollLocked = false;
       let lockedScrollY = 0;
+      let scrollLockInterval = null;
       
-      // Prevent default scroll behavior on mobile
+      // Aggressive scroll prevention function
       const preventScroll = function(e) {
         if (scrollLocked) {
+          e.preventDefault();
           window.scrollTo(0, lockedScrollY);
+          return false;
+        }
+      };
+      
+      // Continuously enforce scroll lock while keyboard is active
+      const enforceScrollLock = function() {
+        if (scrollLocked) {
+          const currentScroll = window.pageYOffset || window.scrollY;
+          if (Math.abs(currentScroll - lockedScrollY) > 1) {
+            window.scrollTo(0, lockedScrollY);
+          }
         }
       };
       
       input.addEventListener('focus', function() {
-        // Lock current scroll position
+        // Lock current scroll position immediately
         lockedScrollY = window.pageYOffset || window.scrollY;
         scrollLocked = true;
-        // Prevent scrolling for a brief moment
-        window.addEventListener('scroll', preventScroll, { passive: false });
+        
+        // Add multiple scroll prevention methods
+        window.addEventListener('scroll', preventScroll, { passive: false, capture: true });
+        window.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
+        
+        // Continuously enforce scroll lock (handles autocomplete bar appearing)
+        scrollLockInterval = setInterval(enforceScrollLock, 50);
       }, { once: true });
       
       // Use Visual Viewport API if available (modern mobile browsers)
       if (window.visualViewport) {
-        // Adjust body padding when keyboard opens
+        // Adjust body padding when keyboard opens (handles both keyboard and autocomplete bar)
         const adjustForKeyboard = () => {
           // Clear previous timer
           if (resizeTimer) {
@@ -670,12 +688,16 @@
             const viewport = window.visualViewport;
             const keyboardHeight = window.innerHeight - viewport.height;
             
-            if (keyboardHeight > 150) { // Keyboard is open
+            if (keyboardHeight > 150) { // Keyboard is open (or autocomplete bar appeared)
               // Position input closer to keyboard (lower on screen)
               // Just adjust padding, don't scroll
               body.style.paddingTop = '25vh';
-              // Keep scroll locked
+              
+              // Re-lock scroll position (autocomplete bar might have caused scroll)
               if (scrollLocked) {
+                // Update locked position to current position to prevent jumping
+                const currentScroll = window.pageYOffset || window.scrollY;
+                lockedScrollY = currentScroll;
                 window.scrollTo(0, lockedScrollY);
               }
             } else {
@@ -683,9 +705,14 @@
               body.style.paddingTop = '';
               // Unlock scroll
               scrollLocked = false;
-              window.removeEventListener('scroll', preventScroll);
+              if (scrollLockInterval) {
+                clearInterval(scrollLockInterval);
+                scrollLockInterval = null;
+              }
+              window.removeEventListener('scroll', preventScroll, { capture: true });
+              window.removeEventListener('touchmove', preventScroll, { capture: true });
             }
-          }, 150); // Debounce resize events
+          }, 100); // Shorter debounce to catch autocomplete bar faster
         };
         
         // Don't call immediately - wait for keyboard to start opening
@@ -700,7 +727,12 @@
           body.style.paddingTop = ''; // Reset to original CSS value
           // Unlock scroll
           scrollLocked = false;
-          window.removeEventListener('scroll', preventScroll);
+          if (scrollLockInterval) {
+            clearInterval(scrollLockInterval);
+            scrollLockInterval = null;
+          }
+          window.removeEventListener('scroll', preventScroll, { capture: true });
+          window.removeEventListener('touchmove', preventScroll, { capture: true });
         }, { once: true });
       }
     }
