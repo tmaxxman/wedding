@@ -544,7 +544,11 @@
         passwordInput.classList.add('granted');
         passwordInput.disabled = true;
         
-        // Parse and display content after half second delay
+        // Close keyboard and scroll back to top first
+        passwordInput.blur();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Wait for keyboard to close and scroll to complete, then fade
         setTimeout(async () => {
           try {
             const data = JSON.parse(decryptedContent);
@@ -568,14 +572,14 @@
             // Now fade in the content
             setTimeout(() => {
               mainContent.style.opacity = '1';
-            }, 10);
+            }, 100);
             
             // Store success in session (not password)
             sessionStorage.setItem('authenticated', 'true');
           } catch (error) {
             errorMsg.textContent = 'Error loading content';
           }
-        }, 500);
+        }, 800);
       } else {
         // Only show error if password seems substantial (likely complete)
         // But don't show error if input is already disabled (access granted)
