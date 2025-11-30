@@ -27,30 +27,13 @@
     /* Better mobile viewport handling */
     @media (max-width: 600px) {
       body {
-        /* Keep original positioning by default - only adjust via JS when keyboard opens */
-        min-height: 100dvh; /* Use dynamic viewport height on mobile */
-        overflow-y: auto; /* Allow scrolling when keyboard appears */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        /* Prevent automatic scrolling when input is focused */
-        scroll-behavior: auto;
+        min-height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
       
-      /* When keyboard is active, lock body completely */
-      body.keyboard-active {
-        position: fixed;
-        width: 100%;
-        overflow: hidden;
-        height: 100vh;
-      }
-      
-      /* Ensure container doesn't prevent scrolling */
       .container {
         position: relative;
-      }
-      
-      /* Prevent scrolling on input focus */
-      .password-input:focus {
-        scroll-margin: 0;
       }
     }
     
@@ -131,7 +114,6 @@
       text-align: center;
       position: relative;
       z-index: 1;
-      transition: transform 0.2s ease-out;
     }
     
     .password-page h1 {
@@ -413,10 +395,9 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v2"
+          placeholder="Enter password v4"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
-          onfocus="handleInputFocus()"
         />
       </div>
       <div id="errorMessage" class="error-message"></div>
@@ -633,110 +614,6 @@
       
       // Simple centered message split into two lines
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
-    }
-    
-    // Handle mobile keyboard - adjust positioning when focused
-    function handleInputFocus() {
-      // Check if we're on mobile
-      const isMobile = window.innerWidth <= 600;
-      if (!isMobile) return;
-      
-      const input = document.getElementById('passwordInput');
-      const passwordPage = document.getElementById('passwordPage');
-      const body = document.body;
-      const html = document.documentElement;
-      let resizeTimer = null; // Debounce resize events
-      let savedScrollY = 0; // Save scroll position before locking
-      
-      // Use Visual Viewport API if available (modern mobile browsers)
-      if (window.visualViewport) {
-        let keyboardActive = false;
-        
-        // Adjust body when keyboard opens/closes (handles both keyboard and autocomplete bar)
-        const adjustForKeyboard = () => {
-          // Clear previous timer
-          if (resizeTimer) {
-            clearTimeout(resizeTimer);
-          }
-          
-          // Debounce resize events
-          resizeTimer = setTimeout(() => {
-            const viewport = window.visualViewport;
-            const keyboardHeight = window.innerHeight - viewport.height;
-            
-            if (keyboardHeight > 150) { // Keyboard is open (or autocomplete bar appeared)
-              if (!keyboardActive) {
-                // Save scroll position before locking
-                savedScrollY = window.pageYOffset || window.scrollY;
-                // Lock body completely - prevents ALL scrolling
-                body.classList.add('keyboard-active');
-                html.style.height = '100vh';
-                html.style.overflow = 'hidden';
-                keyboardActive = true;
-              }
-              
-              // Position input to stay visible above keyboard
-              // For Android, ensure input is positioned in the visible viewport
-              const viewportHeight = viewport.height;
-              const inputRect = input.getBoundingClientRect();
-              const containerRect = passwordPage.getBoundingClientRect();
-              
-              // Check if input is getting cut off at the top
-              const inputTopInViewport = inputRect.top - viewport.offsetTop;
-              const minVisibleTop = 50; // Minimum pixels from top to stay visible
-              
-              // If input is too close to top or cut off, move it down to safe position
-              if (inputTopInViewport < minVisibleTop) {
-                const moveDown = minVisibleTop - inputTopInViewport + 20; // Add extra margin
-                passwordPage.style.transform = `translateY(${moveDown}px)`;
-              } else if (inputRect.bottom > viewportHeight + viewport.offsetTop - 100) {
-                // If input is too low, move it up
-                const moveUp = (viewportHeight + viewport.offsetTop - 100) - inputRect.bottom;
-                passwordPage.style.transform = `translateY(${moveUp}px)`;
-              } else {
-                passwordPage.style.transform = 'translateY(0)';
-              }
-            } else {
-              // Reset everything when keyboard closes
-              if (keyboardActive) {
-                body.classList.remove('keyboard-active');
-                html.style.height = '';
-                html.style.overflow = '';
-                passwordPage.style.transform = '';
-                keyboardActive = false;
-                // Restore scroll position
-                window.scrollTo(0, savedScrollY);
-              }
-            }
-          }, 50); // Very short debounce to catch autocomplete bar quickly
-        };
-        
-        // Watch for viewport changes
-        window.visualViewport.addEventListener('resize', adjustForKeyboard);
-        
-        // Initial check when input is focused
-        input.addEventListener('focus', function() {
-          // Wait a bit for keyboard to start opening
-          setTimeout(() => {
-            adjustForKeyboard();
-          }, 100);
-        }, { once: true });
-        
-        // Clean up listener when input loses focus
-        input.addEventListener('blur', () => {
-          window.visualViewport.removeEventListener('resize', adjustForKeyboard);
-          if (resizeTimer) {
-            clearTimeout(resizeTimer);
-          }
-          // Reset everything
-          body.classList.remove('keyboard-active');
-          html.style.height = '';
-          html.style.overflow = '';
-          passwordPage.style.transform = '';
-          // Restore scroll position
-          window.scrollTo(0, savedScrollY);
-        }, { once: true });
-      }
     }
     
     // Check if already authenticated in this session
