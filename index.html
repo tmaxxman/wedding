@@ -31,11 +31,18 @@
         min-height: 100dvh; /* Use dynamic viewport height on mobile */
         overflow-y: auto; /* Allow scrolling when keyboard appears */
         -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        /* Prevent automatic scrolling when input is focused */
+        scroll-behavior: auto;
       }
       
       /* Ensure container doesn't prevent scrolling */
       .container {
         position: relative;
+      }
+      
+      /* Prevent scrolling on input focus */
+      .password-input:focus {
+        scroll-margin: 0;
       }
     }
     
@@ -619,7 +626,7 @@
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
     }
     
-    // Handle mobile keyboard - scroll input into view when focused
+    // Handle mobile keyboard - adjust positioning when focused
     function handleInputFocus() {
       // Check if we're on mobile
       const isMobile = window.innerWidth <= 600;
@@ -628,8 +635,26 @@
       const input = document.getElementById('passwordInput');
       const passwordPage = document.getElementById('passwordPage');
       const body = document.body;
-      let hasScrolled = false; // Track if we've already scrolled
       let resizeTimer = null; // Debounce resize events
+      
+      // Lock scroll position to prevent automatic scrolling
+      let scrollLocked = false;
+      let lockedScrollY = 0;
+      
+      // Prevent default scroll behavior on mobile
+      const preventScroll = function(e) {
+        if (scrollLocked) {
+          window.scrollTo(0, lockedScrollY);
+        }
+      };
+      
+      input.addEventListener('focus', function() {
+        // Lock current scroll position
+        lockedScrollY = window.pageYOffset || window.scrollY;
+        scrollLocked = true;
+        // Prevent scrolling for a brief moment
+        window.addEventListener('scroll', preventScroll, { passive: false });
+      }, { once: true });
       
       // Use Visual Viewport API if available (modern mobile browsers)
       if (window.visualViewport) {
@@ -640,31 +665,25 @@
             clearTimeout(resizeTimer);
           }
           
-          // Debounce resize events to prevent multiple scrolls
+          // Debounce resize events to prevent janky scrolling
           resizeTimer = setTimeout(() => {
             const viewport = window.visualViewport;
             const keyboardHeight = window.innerHeight - viewport.height;
             
             if (keyboardHeight > 150) { // Keyboard is open
               // Position input closer to keyboard (lower on screen)
+              // Just adjust padding, don't scroll
               body.style.paddingTop = '25vh';
-              
-              // Only scroll once when keyboard first opens
-              if (!hasScrolled) {
-                hasScrolled = true;
-                // Use a longer delay to let keyboard finish animating
-                setTimeout(() => {
-                  input.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'end',
-                    inline: 'nearest'
-                  });
-                }, 400);
+              // Keep scroll locked
+              if (scrollLocked) {
+                window.scrollTo(0, lockedScrollY);
               }
             } else {
               // Reset to original positioning when keyboard closes
               body.style.paddingTop = '';
-              hasScrolled = false; // Reset for next time
+              // Unlock scroll
+              scrollLocked = false;
+              window.removeEventListener('scroll', preventScroll);
             }
           }, 150); // Debounce resize events
         };
@@ -679,16 +698,10 @@
             clearTimeout(resizeTimer);
           }
           body.style.paddingTop = ''; // Reset to original CSS value
-          hasScrolled = false; // Reset flag
+          // Unlock scroll
+          scrollLocked = false;
+          window.removeEventListener('scroll', preventScroll);
         }, { once: true });
-      } else {
-        // Fallback for older browsers - scroll into view without changing padding
-        setTimeout(() => {
-          input.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center'
-          });
-        }, 300);
       }
     }
     
