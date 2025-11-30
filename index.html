@@ -52,6 +52,13 @@
       object-position: center;
     }
     
+    /* Mobile: video scrolls with content */
+    @media (max-width: 768px) {
+      .video-background {
+        position: absolute;
+      }
+    }
+    
     /* Dark overlay for better text readability */
     .video-background::after {
       content: '';
@@ -390,7 +397,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v6"
+          placeholder="Enter password v7"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -589,14 +596,25 @@
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
     }
     
-    // Mobile: scroll input into view when keyboard opens
+    // Mobile: scroll input into view when user taps (not on programmatic focus)
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
+      let userTapped = false;
+      
+      // Track when user actually taps the input
+      document.getElementById('passwordInput').addEventListener('touchstart', function() {
+        userTapped = true;
+      });
+      
       document.getElementById('passwordInput').addEventListener('focus', function() {
-        // Wait for keyboard to open, then scroll input into view
-        setTimeout(() => {
-          this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 300);
+        // Only scroll if user tapped, not on programmatic focus
+        if (userTapped) {
+          userTapped = false;
+          // Wait for keyboard to open, then scroll the whole page
+          setTimeout(() => {
+            window.scrollTo({ top: 100, behavior: 'smooth' });
+          }, 300);
+        }
       });
     }
     
