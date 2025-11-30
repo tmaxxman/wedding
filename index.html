@@ -35,6 +35,14 @@
         scroll-behavior: auto;
       }
       
+      /* When keyboard is active, lock body completely */
+      body.keyboard-active {
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+        height: 100vh;
+      }
+      
       /* Ensure container doesn't prevent scrolling */
       .container {
         position: relative;
@@ -86,7 +94,7 @@
     /* Fade out video on main content page */
     body.content-visible .video-background {
       opacity: 0;
-      transition: opacity 3s ease-out;
+      transition: opacity 2s ease-out;
       pointer-events: none;
     }
     
@@ -123,6 +131,7 @@
       text-align: center;
       position: relative;
       z-index: 1;
+      transition: transform 0.2s ease-out;
     }
     
     .password-page h1 {
@@ -245,7 +254,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      transition: opacity 5s ease-in;
+      transition: opacity 4s ease-in;
     }
     
     .main-content h1 {
@@ -401,10 +410,10 @@
     <div id="passwordPage" class="password-page">
       <div class="password-input-container">
         <input 
-          type="password" 
+          type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v0"
+          placeholder="Enter password v1"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
           onfocus="handleInputFocus()"
@@ -635,88 +644,64 @@
       const input = document.getElementById('passwordInput');
       const passwordPage = document.getElementById('passwordPage');
       const body = document.body;
+      const html = document.documentElement;
       let resizeTimer = null; // Debounce resize events
-      
-      // Lock scroll position to prevent automatic scrolling (handles autocomplete bar too)
-      let scrollLocked = false;
-      let lockedScrollY = 0;
-      let scrollLockInterval = null;
-      
-      // Aggressive scroll prevention function
-      const preventScroll = function(e) {
-        if (scrollLocked) {
-          e.preventDefault();
-          window.scrollTo(0, lockedScrollY);
-          return false;
-        }
-      };
-      
-      // Continuously enforce scroll lock while keyboard is active
-      const enforceScrollLock = function() {
-        if (scrollLocked) {
-          const currentScroll = window.pageYOffset || window.scrollY;
-          if (Math.abs(currentScroll - lockedScrollY) > 1) {
-            window.scrollTo(0, lockedScrollY);
-          }
-        }
-      };
-      
-      input.addEventListener('focus', function() {
-        // Lock current scroll position immediately
-        lockedScrollY = window.pageYOffset || window.scrollY;
-        scrollLocked = true;
-        
-        // Add multiple scroll prevention methods
-        window.addEventListener('scroll', preventScroll, { passive: false, capture: true });
-        window.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
-        
-        // Continuously enforce scroll lock (handles autocomplete bar appearing)
-        scrollLockInterval = setInterval(enforceScrollLock, 50);
-      }, { once: true });
+      let savedScrollY = 0; // Save scroll position before locking
       
       // Use Visual Viewport API if available (modern mobile browsers)
       if (window.visualViewport) {
-        // Adjust body padding when keyboard opens (handles both keyboard and autocomplete bar)
+        let keyboardActive = false;
+        
+        // Adjust body when keyboard opens/closes (handles both keyboard and autocomplete bar)
         const adjustForKeyboard = () => {
           // Clear previous timer
           if (resizeTimer) {
             clearTimeout(resizeTimer);
           }
           
-          // Debounce resize events to prevent janky scrolling
+          // Debounce resize events
           resizeTimer = setTimeout(() => {
             const viewport = window.visualViewport;
             const keyboardHeight = window.innerHeight - viewport.height;
             
             if (keyboardHeight > 150) { // Keyboard is open (or autocomplete bar appeared)
-              // Position input closer to keyboard (lower on screen)
-              // Just adjust padding, don't scroll
-              body.style.paddingTop = '25vh';
+              if (!keyboardActive) {
+                // Save scroll position before locking
+                savedScrollY = window.pageYOffset || window.scrollY;
+                // Lock body completely - prevents ALL scrolling
+                body.classList.add('keyboard-active');
+                html.style.height = '100vh';
+                html.style.overflow = 'hidden';
+                keyboardActive = true;
+              }
               
-              // Re-lock scroll position (autocomplete bar might have caused scroll)
-              if (scrollLocked) {
-                // Update locked position to current position to prevent jumping
-                const currentScroll = window.pageYOffset || window.scrollY;
-                lockedScrollY = currentScroll;
-                window.scrollTo(0, lockedScrollY);
-              }
+              // Position input closer to keyboard using transform (no layout shift)
+              passwordPage.style.transform = 'translateY(-10vh)';
             } else {
-              // Reset to original positioning when keyboard closes
-              body.style.paddingTop = '';
-              // Unlock scroll
-              scrollLocked = false;
-              if (scrollLockInterval) {
-                clearInterval(scrollLockInterval);
-                scrollLockInterval = null;
+              // Reset everything when keyboard closes
+              if (keyboardActive) {
+                body.classList.remove('keyboard-active');
+                html.style.height = '';
+                html.style.overflow = '';
+                passwordPage.style.transform = '';
+                keyboardActive = false;
+                // Restore scroll position
+                window.scrollTo(0, savedScrollY);
               }
-              window.removeEventListener('scroll', preventScroll, { capture: true });
-              window.removeEventListener('touchmove', preventScroll, { capture: true });
             }
-          }, 100); // Shorter debounce to catch autocomplete bar faster
+          }, 50); // Very short debounce to catch autocomplete bar quickly
         };
         
-        // Don't call immediately - wait for keyboard to start opening
+        // Watch for viewport changes
         window.visualViewport.addEventListener('resize', adjustForKeyboard);
+        
+        // Initial check when input is focused
+        input.addEventListener('focus', function() {
+          // Wait a bit for keyboard to start opening
+          setTimeout(() => {
+            adjustForKeyboard();
+          }, 100);
+        }, { once: true });
         
         // Clean up listener when input loses focus
         input.addEventListener('blur', () => {
@@ -724,15 +709,13 @@
           if (resizeTimer) {
             clearTimeout(resizeTimer);
           }
-          body.style.paddingTop = ''; // Reset to original CSS value
-          // Unlock scroll
-          scrollLocked = false;
-          if (scrollLockInterval) {
-            clearInterval(scrollLockInterval);
-            scrollLockInterval = null;
-          }
-          window.removeEventListener('scroll', preventScroll, { capture: true });
-          window.removeEventListener('touchmove', preventScroll, { capture: true });
+          // Reset everything
+          body.classList.remove('keyboard-active');
+          html.style.height = '';
+          html.style.overflow = '';
+          passwordPage.style.transform = '';
+          // Restore scroll position
+          window.scrollTo(0, savedScrollY);
         }, { once: true });
       }
     }
