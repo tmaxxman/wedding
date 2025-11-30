@@ -397,7 +397,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v7"
+          placeholder="Enter password v8"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -596,34 +596,16 @@
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
     }
     
-    // Mobile: scroll input into view when user taps (not on programmatic focus)
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      let userTapped = false;
-      
-      // Track when user actually taps the input
-      document.getElementById('passwordInput').addEventListener('touchstart', function() {
-        userTapped = true;
-      });
-      
+    // Mobile: scroll page up when keyboard opens so input is visible
+    if (window.innerWidth <= 768) {
       document.getElementById('passwordInput').addEventListener('focus', function() {
-        // Only scroll if user tapped, not on programmatic focus
-        if (userTapped) {
-          userTapped = false;
-          // Wait for keyboard to open, then scroll the whole page
-          setTimeout(() => {
-            window.scrollTo({ top: 100, behavior: 'smooth' });
-          }, 300);
-        }
+        // Wait for keyboard to fully open, then scroll up
+        setTimeout(() => {
+          // Scroll enough to move content above keyboard (keyboards are ~40-50% of screen)
+          const scrollAmount = window.innerHeight * 0.35;
+          window.scrollTo({ top: scrollAmount, behavior: 'smooth' });
+        }, 400);
       });
-    }
-    
-    // Check if already authenticated in this session
-    if (sessionStorage.getItem('authenticated') === 'true') {
-      document.getElementById('passwordInput').focus();
-      // Could auto-prompt for password here if desired
-    } else {
-      document.getElementById('passwordInput').focus();
     }
   </script>
 </body>
