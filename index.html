@@ -24,6 +24,21 @@
       overflow: hidden;
     }
     
+    /* Better mobile viewport handling */
+    @media (max-width: 600px) {
+      body {
+        padding-top: 20vh;
+        min-height: 100dvh; /* Use dynamic viewport height on mobile */
+        overflow-y: auto; /* Allow scrolling when keyboard appears */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      }
+      
+      /* Ensure container doesn't prevent scrolling */
+      .container {
+        position: relative;
+      }
+    }
+    
     /* Video background for password page */
     .video-background {
       position: fixed;
@@ -149,6 +164,24 @@
       justify-content: center;
       margin-bottom: 15px;
       position: relative;
+    }
+    
+    /* Ensure input stays visible on mobile when keyboard opens */
+    @media (max-width: 600px) {
+      .password-page {
+        padding: 20px 20px;
+        min-height: auto;
+      }
+      
+      .password-input-container {
+        margin-top: 10px;
+      }
+      
+      /* When input is focused, ensure it's visible */
+      .password-input:focus {
+        position: relative;
+        z-index: 10;
+      }
     }
     
     .password-input.granted {
@@ -367,6 +400,7 @@
           placeholder="Enter password"
           oninput="checkPasswordAsYouType()"
           onkeypress="if(event.key === 'Enter') checkPassword()"
+          onfocus="handleInputFocus()"
         />
       </div>
       <div id="errorMessage" class="error-message"></div>
@@ -540,6 +574,56 @@
       
       // Simple centered message split into two lines
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
+    }
+    
+    // Handle mobile keyboard - scroll input into view when focused
+    function handleInputFocus() {
+      // Check if we're on mobile
+      const isMobile = window.innerWidth <= 600;
+      if (!isMobile) return;
+      
+      const input = document.getElementById('passwordInput');
+      const passwordPage = document.getElementById('passwordPage');
+      const body = document.body;
+      
+      // Use Visual Viewport API if available (modern mobile browsers)
+      if (window.visualViewport) {
+        // Adjust body padding when keyboard opens
+        const adjustForKeyboard = () => {
+          const viewport = window.visualViewport;
+          const keyboardHeight = window.innerHeight - viewport.height;
+          
+          if (keyboardHeight > 150) { // Keyboard is open
+            body.style.paddingTop = '10vh';
+            // Scroll input into view
+            setTimeout(() => {
+              input.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center'
+              });
+            }, 100);
+          } else {
+            body.style.paddingTop = '20vh'; // Reset when keyboard closes
+          }
+        };
+        
+        window.visualViewport.addEventListener('resize', adjustForKeyboard);
+        adjustForKeyboard(); // Initial check
+        
+        // Clean up listener when input loses focus
+        input.addEventListener('blur', () => {
+          window.visualViewport.removeEventListener('resize', adjustForKeyboard);
+          body.style.paddingTop = '20vh';
+        }, { once: true });
+      } else {
+        // Fallback for older browsers - scroll into view
+        setTimeout(() => {
+          input.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center'
+          });
+        }, 300);
+      }
     }
     
     // Check if already authenticated in this session
