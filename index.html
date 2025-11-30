@@ -595,12 +595,14 @@
           const keyboardHeight = window.innerHeight - viewport.height;
           
           if (keyboardHeight > 150) { // Keyboard is open
-            body.style.paddingTop = '10vh';
-            // Scroll input into view
+            // Position input closer to keyboard (lower on screen)
+            body.style.paddingTop = '25vh';
+            // Scroll input into view, positioned near bottom
             setTimeout(() => {
               input.scrollIntoView({ 
                 behavior: 'smooth', 
-                block: 'center'
+                block: 'end',
+                inline: 'nearest'
               });
             }, 100);
           } else {
