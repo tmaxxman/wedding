@@ -88,8 +88,11 @@
     body.content-visible {
       background: #2c2c2c;
       align-items: center;
-      padding-top: 0;
-      padding: 0;
+      padding-top: 0 !important;
+      padding: 0 !important;
+      min-height: 100vh !important;
+      padding-bottom: 0 !important;
+      overflow: hidden !important;
     }
     
     .container {
@@ -399,7 +402,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v12"
+          placeholder="Enter password v13"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
