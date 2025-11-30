@@ -30,10 +30,17 @@
         min-height: 100dvh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        height: auto;
       }
       
       .container {
         position: relative;
+        min-height: 100vh;
+      }
+      
+      /* Ensure password input can scroll into view */
+      .password-input {
+        scroll-margin-top: 20px;
       }
     }
     
@@ -395,7 +402,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v4"
+          placeholder="Enter password v5"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -616,12 +623,25 @@
       content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
     }
     
+    // Simple scroll into view on focus for mobile
+    const passwordInput = document.getElementById('passwordInput');
+    passwordInput.addEventListener('focus', function() {
+      // Small delay to let keyboard start opening, then scroll input into view
+      setTimeout(() => {
+        this.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center',
+          inline: 'nearest'
+        });
+      }, 300);
+    });
+    
     // Check if already authenticated in this session
     if (sessionStorage.getItem('authenticated') === 'true') {
-      document.getElementById('passwordInput').focus();
+      passwordInput.focus();
       // Could auto-prompt for password here if desired
     } else {
-      document.getElementById('passwordInput').focus();
+      passwordInput.focus();
     }
   </script>
 </body>
