@@ -399,7 +399,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v11"
+          placeholder="Enter password v12"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -559,6 +559,13 @@
             
             // Hide password page
             document.getElementById('passwordPage').classList.add('hidden');
+            
+            // Reset mobile-specific styles before showing content
+            document.body.style.minHeight = '';
+            document.body.style.paddingBottom = '';
+            document.body.style.paddingTop = '';
+            document.body.style.overflow = '';
+            window.scrollTo(0, 0);
             
             // Trigger fade transitions for background
             document.body.classList.add('content-visible');
