@@ -413,7 +413,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v1"
+          placeholder="Enter password v2"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
           onfocus="handleInputFocus()"
@@ -675,8 +675,27 @@
                 keyboardActive = true;
               }
               
-              // Position input closer to keyboard using transform (no layout shift)
-              passwordPage.style.transform = 'translateY(-10vh)';
+              // Position input to stay visible above keyboard
+              // For Android, ensure input is positioned in the visible viewport
+              const viewportHeight = viewport.height;
+              const inputRect = input.getBoundingClientRect();
+              const containerRect = passwordPage.getBoundingClientRect();
+              
+              // Check if input is getting cut off at the top
+              const inputTopInViewport = inputRect.top - viewport.offsetTop;
+              const minVisibleTop = 50; // Minimum pixels from top to stay visible
+              
+              // If input is too close to top or cut off, move it down to safe position
+              if (inputTopInViewport < minVisibleTop) {
+                const moveDown = minVisibleTop - inputTopInViewport + 20; // Add extra margin
+                passwordPage.style.transform = `translateY(${moveDown}px)`;
+              } else if (inputRect.bottom > viewportHeight + viewport.offsetTop - 100) {
+                // If input is too low, move it up
+                const moveUp = (viewportHeight + viewport.offsetTop - 100) - inputRect.bottom;
+                passwordPage.style.transform = `translateY(${moveUp}px)`;
+              } else {
+                passwordPage.style.transform = 'translateY(0)';
+              }
             } else {
               // Reset everything when keyboard closes
               if (keyboardActive) {
