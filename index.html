@@ -338,13 +338,27 @@
       border-bottom: 2px solid #F5A623;
     }
     
+    /* Mobile top bar */
+    .mobile-top-bar {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 55px;
+      background: #faf9f7;
+      z-index: 1001;
+      border-bottom: 1px solid #eee;
+    }
+    
     /* Mobile hamburger button */
     .hamburger {
       display: none;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1001;
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      z-index: 1002;
       background: none;
       border: none;
       cursor: pointer;
@@ -376,10 +390,10 @@
     .mobile-menu {
       display: none;
       position: fixed;
-      top: 0;
+      top: 55px;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: calc(100% - 55px);
       background: #faf9f7;
       z-index: 1000;
       flex-direction: column;
@@ -498,6 +512,10 @@
         display: none;
       }
       
+      .mobile-top-bar {
+        display: block;
+      }
+      
       .hamburger {
         display: block;
       }
@@ -511,7 +529,7 @@
       }
       
       .site-header {
-        padding: 80px 20px 30px;
+        padding: 70px 20px 30px; /* Extra top padding to account for fixed top bar */
       }
       
       .photo-grid {
@@ -650,7 +668,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v34)"
+          placeholder="Enter password (v35)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -860,12 +878,14 @@
       const content = document.getElementById('mainContent');
       
       content.innerHTML = `
-        <!-- Hamburger Menu Button -->
-        <button class="hamburger" onclick="toggleMobileMenu()">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <!-- Mobile Top Bar -->
+        <div class="mobile-top-bar">
+          <button class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
         
         <!-- Mobile Menu Overlay -->
         <div class="mobile-menu" id="mobileMenu">
