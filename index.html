@@ -257,11 +257,6 @@
       overflow-x: hidden;
     }
     
-    /* Desktop header container - scrolls with page on desktop */
-    .desktop-header {
-      background: #faf9f7;
-    }
-    
     /* Site Header */
     .site-header {
       text-align: center;
@@ -325,8 +320,10 @@
       }
     }
     
-    /* Mobile-only elements hidden on desktop */
-    .mobile-only {
+    /* Hide mobile elements on desktop */
+    .mobile-top-bar,
+    .mobile-menu,
+    .mobile-scroll-container {
       display: none;
     }
     
@@ -381,8 +378,21 @@
       color: #333;
     }
     
-    /* Scrollable content wrapper */
-    .scroll-container {
+    /* Desktop scroll container - full page scrollable */
+    .desktop-scroll-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #faf9f7;
+    }
+    
+    /* Mobile scroll container */
+    .mobile-scroll-container {
+      display: none;
       background: #faf9f7;
     }
     
@@ -725,7 +735,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v45)"
+          placeholder="Enter password (v46)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -935,9 +945,55 @@
     function displayContent(data) {
       const content = document.getElementById('mainContent');
       
+      const sectionsHTML = `
+        <!-- Home Section -->
+        <section class="page-section active" id="section-home">
+          <h2>Welcome</h2>
+          <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
+          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+        </section>
+        
+        <!-- Photos Section -->
+        <section class="page-section" id="section-photos">
+          <h2>Photos</h2>
+          <p>A collection of our favorite moments together.</p>
+          <div class="photo-grid">
+            <!-- Photos will go here -->
+          </div>
+        </section>
+        
+        <!-- Q+A Section -->
+        <section class="page-section" id="section-qa">
+          <h2>Q + A</h2>
+          <p>Answers to frequently asked questions about our wedding.</p>
+        </section>
+        
+        <!-- Travel Section -->
+        <section class="page-section" id="section-travel">
+          <h2>Travel</h2>
+          <p>Information about getting to Nantucket and where to stay.</p>
+        </section>
+        
+        <!-- Things to Do Section -->
+        <section class="page-section" id="section-things">
+          <h2>Things to Do</h2>
+          <p>Our favorite spots and activities on the island.</p>
+        </section>
+        
+        <!-- Registry Section -->
+        <section class="page-section" id="section-registry">
+          <h2>Our Registry</h2>
+          <p>Thank you for thinking of us!</p>
+        </section>
+      `;
+      
       content.innerHTML = `
-        <!-- Desktop Header (names, date, nav) - scrolls with page -->
-        <div class="desktop-header">
+        <!-- DESKTOP: One big scrollable container -->
+        <div class="desktop-scroll-container">
           <header class="site-header">
             <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
             <p class="site-date">December 31, 2026 <span style="color: #F5A623;">✦</span> Boston, Massachusetts</p>
@@ -950,9 +1006,12 @@
             <a href="#" onclick="showSection('things')">Things to Do</a>
             <a href="#" onclick="showSection('registry')">Our Registry</a>
           </nav>
+          <div class="desktop-sections">
+            ${sectionsHTML}
+          </div>
         </div>
         
-        <!-- Mobile Top Bar -->
+        <!-- MOBILE: Fixed top bar + scrollable content below -->
         <div class="mobile-top-bar">
           <button class="hamburger" onclick="toggleMobileMenu()">
             <span></span>
@@ -962,7 +1021,6 @@
           <span class="mobile-top-bar-title" id="mobilePageTitle">M & N</span>
         </div>
         
-        <!-- Mobile Menu Overlay -->
         <div class="mobile-menu" id="mobileMenu">
           <nav>
             <a href="#" onclick="showSection('home')">Home</a>
@@ -974,10 +1032,8 @@
           </nav>
         </div>
         
-        <!-- Scrollable content container -->
-        <div class="scroll-container">
-          <!-- Mobile header (shows on mobile only) -->
-          <header class="site-header mobile-only">
+        <div class="mobile-scroll-container">
+          <header class="site-header">
             <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
             <div class="site-date-mobile">
               <span class="date-line">December 31, 2026</span>
@@ -985,50 +1041,9 @@
               <span class="location-line">Boston, Massachusetts</span>
             </div>
           </header>
-          
-          <!-- Home Section -->
-          <section class="page-section active" id="section-home">
-            <h2>Welcome</h2>
-            <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
-            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-          </section>
-          
-          <!-- Photos Section -->
-          <section class="page-section" id="section-photos">
-            <h2>Photos</h2>
-            <p>A collection of our favorite moments together.</p>
-            <div class="photo-grid">
-              <!-- Photos will go here -->
-            </div>
-          </section>
-          
-          <!-- Q+A Section -->
-          <section class="page-section" id="section-qa">
-            <h2>Q + A</h2>
-            <p>Answers to frequently asked questions about our wedding.</p>
-          </section>
-          
-          <!-- Travel Section -->
-          <section class="page-section" id="section-travel">
-            <h2>Travel</h2>
-            <p>Information about getting to Nantucket and where to stay.</p>
-          </section>
-          
-          <!-- Things to Do Section -->
-          <section class="page-section" id="section-things">
-            <h2>Things to Do</h2>
-            <p>Our favorite spots and activities on the island.</p>
-          </section>
-          
-          <!-- Registry Section -->
-          <section class="page-section" id="section-registry">
-            <h2>Our Registry</h2>
-            <p>Thank you for thinking of us!</p>
-          </section>
+          <div class="mobile-sections">
+            ${sectionsHTML}
+          </div>
         </div>
       `;
     }
