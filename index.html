@@ -732,7 +732,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v51)"
+          placeholder="Enter password (v52)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -1065,15 +1065,18 @@
         section.classList.remove('active');
       });
       
-      // Show selected section
-      const section = document.getElementById('section-' + sectionId);
-      if (section) section.classList.add('active');
+      // Show selected section in both desktop and mobile containers
+      document.querySelectorAll('#section-' + sectionId).forEach(section => {
+        section.classList.add('active');
+      });
       
       // Update nav active state
       document.querySelectorAll('.site-nav a').forEach(link => {
         link.classList.remove('active');
       });
-      event.target.classList.add('active');
+      if (typeof event !== 'undefined' && event.target) {
+        event.target.classList.add('active');
+      }
       
       // Update mobile top bar title
       const mobileTitle = document.getElementById('mobilePageTitle');
