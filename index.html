@@ -4,6 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Our Wedding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -86,13 +89,14 @@
     }
     
     body.content-visible {
-      background: #2c2c2c;
-      align-items: center;
+      background: #fff;
+      align-items: flex-start;
       padding-top: 0 !important;
       padding: 0 !important;
       min-height: 100vh !important;
       padding-bottom: 0 !important;
-      overflow: hidden !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
     }
     
     .container {
@@ -234,50 +238,260 @@
       font-weight: 500;
     }
     
+    /* ========== MAIN CONTENT STYLES ========== */
     .main-content {
-      padding: 0;
       display: none;
-      text-align: center;
       width: 100%;
-      background: transparent;
+      min-height: 100vh;
+      background: #fff;
       opacity: 0;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       transition: opacity 4s ease-in;
+      font-family: 'Source Sans 3', sans-serif;
     }
     
-    .main-content h1 {
-      font-size: 3.5em;
-      color: #f5f5f5;
-      font-weight: 300;
+    /* Site Header */
+    .site-header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: #fff;
+    }
+    
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 4em;
+      font-weight: 400;
+      color: #1a1a1a;
       letter-spacing: 2px;
-      line-height: 1.6;
+      margin-bottom: 15px;
     }
     
-    @media (max-width: 600px) {
-      .main-content h1 {
-        font-size: 2em;
-      }
+    .site-title .ampersand {
+      font-style: italic;
     }
     
-    .header {
+    .site-date {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.1em;
+      font-weight: 400;
+      color: #333;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    
+    /* Desktop Navigation */
+    .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .site-nav a {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.95em;
+      font-weight: 400;
+      color: #333;
+      text-decoration: none;
+      letter-spacing: 1px;
+      padding: 5px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    
+    .site-nav a:hover,
+    .site-nav a.active {
+      border-bottom: 1px solid #333;
+    }
+    
+    /* Mobile hamburger button */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+    
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background: #333;
+      margin: 5px 0;
+      transition: all 0.3s;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+    
+    /* Mobile menu overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 1000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    
+    .mobile-menu.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .mobile-menu-header {
       text-align: center;
       margin-bottom: 40px;
-      padding-bottom: 30px;
-      border-bottom: 2px solid #eee;
     }
     
-    .header h1 {
+    .mobile-menu-title {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.9em;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
       color: #333;
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
     }
     
-    .header .date {
-      color: #667eea;
-      font-size: 1.3em;
+    .mobile-menu-couple {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      font-weight: 400;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+    
+    .mobile-menu-couple .ampersand {
       font-style: italic;
+    }
+    
+    .mobile-menu-date {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.85em;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #333;
+      margin-top: 15px;
+    }
+    
+    .mobile-menu nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+    
+    .mobile-menu nav a {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.1em;
+      font-weight: 400;
+      color: #333;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    
+    /* Page sections */
+    .page-section {
+      display: none;
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .page-section.active {
+      display: block;
+    }
+    
+    .page-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      font-weight: 400;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .page-section p {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #444;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    
+    /* Photo grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 40px;
+    }
+    
+    .photo-grid img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .site-nav {
+        display: none;
+      }
+      
+      .hamburger {
+        display: block;
+      }
+      
+      .mobile-menu {
+        display: flex;
+      }
+      
+      .site-title {
+        font-size: 2.5em;
+      }
+      
+      .site-header {
+        padding: 80px 20px 30px;
+      }
+      
+      .photo-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .photo-grid img {
+        height: 250px;
+      }
+      
+      .page-section h2 {
+        font-size: 1.8em;
+      }
     }
     
     .section {
@@ -403,7 +617,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password v14"
+          placeholder="Enter password (v15)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -612,8 +826,120 @@
     function displayContent(data) {
       const content = document.getElementById('mainContent');
       
-      // Simple centered message split into two lines
-      content.innerHTML = '<h1>Meghan and Nolan<br>are the hottest.</h1>';
+      content.innerHTML = `
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu" id="mobileMenu">
+          <div class="mobile-menu-header">
+            <div class="mobile-menu-title">Photos</div>
+            <div class="mobile-menu-couple">
+              MEGHAN <span class="ampersand">&</span><br>NOLAN
+            </div>
+            <div class="mobile-menu-date">June 14, 2025 • Nantucket, Massachusetts</div>
+          </div>
+          <nav>
+            <a href="#" onclick="showSection('home')">Home</a>
+            <a href="#" onclick="showSection('photos')">Photos</a>
+            <a href="#" onclick="showSection('qa')">Q + A</a>
+            <a href="#" onclick="showSection('travel')">Travel</a>
+            <a href="#" onclick="showSection('things')">Things to Do</a>
+            <a href="#" onclick="showSection('registry')">Our Registry</a>
+          </nav>
+        </div>
+        
+        <!-- Site Header -->
+        <header class="site-header">
+          <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
+          <p class="site-date">June 14, 2025 • Nantucket, Massachusetts</p>
+        </header>
+        
+        <!-- Desktop Navigation -->
+        <nav class="site-nav">
+          <a href="#" onclick="showSection('home')" class="active">Home</a>
+          <a href="#" onclick="showSection('photos')">Photos</a>
+          <a href="#" onclick="showSection('qa')">Q + A</a>
+          <a href="#" onclick="showSection('travel')">Travel</a>
+          <a href="#" onclick="showSection('things')">Things to Do</a>
+          <a href="#" onclick="showSection('registry')">Our Registry</a>
+        </nav>
+        
+        <!-- Home Section -->
+        <section class="page-section active" id="section-home">
+          <h2>Welcome</h2>
+          <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
+        </section>
+        
+        <!-- Photos Section -->
+        <section class="page-section" id="section-photos">
+          <h2>Photos</h2>
+          <p>A collection of our favorite moments together.</p>
+          <div class="photo-grid">
+            <!-- Photos will go here -->
+          </div>
+        </section>
+        
+        <!-- Q+A Section -->
+        <section class="page-section" id="section-qa">
+          <h2>Q + A</h2>
+          <p>Answers to frequently asked questions about our wedding.</p>
+        </section>
+        
+        <!-- Travel Section -->
+        <section class="page-section" id="section-travel">
+          <h2>Travel</h2>
+          <p>Information about getting to Nantucket and where to stay.</p>
+        </section>
+        
+        <!-- Things to Do Section -->
+        <section class="page-section" id="section-things">
+          <h2>Things to Do</h2>
+          <p>Our favorite spots and activities on the island.</p>
+        </section>
+        
+        <!-- Registry Section -->
+        <section class="page-section" id="section-registry">
+          <h2>Our Registry</h2>
+          <p>Thank you for thinking of us!</p>
+        </section>
+      `;
+    }
+    
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.querySelector('.hamburger');
+      menu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    }
+    
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      const section = document.getElementById('section-' + sectionId);
+      if (section) section.classList.add('active');
+      
+      // Update nav active state
+      document.querySelectorAll('.site-nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Close mobile menu if open
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.querySelector('.hamburger');
+      if (menu) menu.classList.remove('active');
+      if (hamburger) hamburger.classList.remove('active');
+      
+      return false;
     }
     
     // Mobile: scroll page up when keyboard opens so input is visible
