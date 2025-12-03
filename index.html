@@ -27,15 +27,6 @@
       overflow: hidden;
     }
     
-    /* Mobile: allow scrolling so keyboard doesn't cover input (password page only) */
-    @media (max-width: 768px) {
-      body:not(.content-visible) {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        min-height: 150vh; /* Extra height so page can scroll up when keyboard opens */
-        padding-bottom: 50vh;
-      }
-    }
     
     /* Video background for password page */
     .video-background {
@@ -741,7 +732,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v49)"
+          placeholder="Enter password (v51)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -756,7 +747,7 @@
   </div>
 
   <script>
-    // Mobile: Lock heights to pixels to prevent shift when keyboard opens
+    // Mobile: Lock video height to prevent resize when keyboard opens
     (function() {
       const isMobile = window.innerWidth <= 768;
       if (isMobile) {
@@ -767,9 +758,6 @@
         // Lock video to initial height
         if (video) video.style.height = initialHeight + 'px';
         if (videoEl) videoEl.style.height = initialHeight + 'px';
-        
-        // Lock body padding-top to pixels (was calc(58vh - 50px))
-        document.body.style.paddingTop = (initialHeight * 0.58 - 50) + 'px';
       }
     })();
     
@@ -1102,28 +1090,6 @@
       return false;
     }
     
-    // Mobile: scroll page up when keyboard opens so input is visible
-    if (window.innerWidth <= 768) {
-      let hasScrolledForKeyboard = false;
-      const passwordInput = document.getElementById('passwordInput');
-      
-      passwordInput.addEventListener('focus', function() {
-        if (hasScrolledForKeyboard) return; // Prevent multiple scrolls
-        hasScrolledForKeyboard = true;
-        
-        // Wait for keyboard to fully open, then scroll up
-        setTimeout(() => {
-          // Scroll enough to move content above keyboard (keyboards are ~40-50% of screen)
-          const scrollAmount = window.innerHeight * 0.25;
-          window.scrollTo({ top: scrollAmount, behavior: 'smooth' });
-        }, 400);
-      });
-      
-      // Reset flag when input loses focus
-      passwordInput.addEventListener('blur', function() {
-        hasScrolledForKeyboard = false;
-      });
-    }
   </script>
 </body>
 </html>
