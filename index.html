@@ -590,7 +590,8 @@
       }
       
       /* Mobile: scroll container is fixed below mobile top bar */
-      .scroll-container {
+      .mobile-scroll-container {
+        display: block;
         position: fixed;
         top: 60px;
         left: 0;
@@ -599,6 +600,11 @@
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Mobile: add padding to header inside scroll container */
+      .mobile-scroll-container .site-header {
+        padding-top: 30px;
       }
       
       /* Hide desktop header on mobile */
@@ -735,7 +741,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v47)"
+          placeholder="Enter password (v48)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
