@@ -7,7 +7,12 @@
     // GitHub Pages SPA redirect
     // Store the path and redirect to index.html
     sessionStorage.setItem('redirect', location.pathname);
-    location.replace(location.origin + '/');
+    
+    // Detect base path (e.g., '/wedding' for GitHub Pages)
+    const pathParts = location.pathname.split('/').filter(p => p);
+    const basePath = pathParts.length > 0 && pathParts[0] === 'wedding' ? '/wedding/' : '/';
+    
+    location.replace(location.origin + basePath);
   </script>
 </head>
 <body>
