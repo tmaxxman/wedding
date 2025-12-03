@@ -345,10 +345,23 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 55px;
+      height: 60px;
       background: #faf9f7;
       z-index: 1001;
       border-bottom: 1px solid #eee;
+    }
+    
+    .mobile-top-bar-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9em;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #333;
     }
     
     /* Mobile hamburger button */
@@ -390,10 +403,10 @@
     .mobile-menu {
       display: none;
       position: fixed;
-      top: 55px;
+      top: 60px;
       left: 0;
       width: 100%;
-      height: calc(100% - 55px);
+      height: calc(100% - 60px);
       background: #faf9f7;
       z-index: 1000;
       flex-direction: column;
@@ -529,7 +542,7 @@
       }
       
       .site-header {
-        padding: 70px 20px 30px; /* Extra top padding to account for fixed top bar */
+        padding: 75px 20px 30px; /* Extra top padding to account for fixed top bar */
       }
       
       .photo-grid {
@@ -668,7 +681,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v35)"
+          placeholder="Enter password (v36)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -885,6 +898,7 @@
             <span></span>
             <span></span>
           </button>
+          <span class="mobile-top-bar-title" id="mobilePageTitle">Home</span>
         </div>
         
         <!-- Mobile Menu Overlay -->
@@ -969,6 +983,16 @@
     }
     
     function showSection(sectionId) {
+      // Section title mapping
+      const titles = {
+        'home': 'Home',
+        'photos': 'Photos',
+        'qa': 'Q + A',
+        'travel': 'Travel',
+        'things': 'Things to Do',
+        'registry': 'Our Registry'
+      };
+      
       // Hide all sections
       document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active');
@@ -983,6 +1007,12 @@
         link.classList.remove('active');
       });
       event.target.classList.add('active');
+      
+      // Update mobile top bar title
+      const mobileTitle = document.getElementById('mobilePageTitle');
+      if (mobileTitle && titles[sectionId]) {
+        mobileTitle.textContent = titles[sectionId];
+      }
       
       // Close mobile menu if open
       const menu = document.getElementById('mobileMenu');
