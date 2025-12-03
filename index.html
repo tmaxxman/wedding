@@ -367,6 +367,11 @@
       color: #333;
     }
     
+    /* Mobile scrollable content wrapper */
+    .mobile-scroll-container {
+      display: contents; /* On desktop, acts as if it doesn't exist */
+    }
+    
     /* Mobile hamburger button */
     .hamburger {
       display: none;
@@ -545,7 +550,7 @@
       }
       
       .site-header {
-        padding: 75px 20px 30px; /* Extra top padding to account for fixed top bar */
+        padding: 15px 20px 30px; /* Reduced top padding since scroll container handles offset */
       }
       
       .photo-grid {
@@ -558,6 +563,20 @@
       
       .page-section h2 {
         font-size: 1.8em;
+      }
+      
+      /* Mobile scroll container - fixed below top bar, scrolls independently */
+      .mobile-scroll-container {
+        display: block;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        background: #faf9f7;
       }
     }
     
@@ -684,7 +703,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v41)"
+          placeholder="Enter password (v42)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -916,70 +935,73 @@
           </nav>
         </div>
         
-        <!-- Site Header -->
-        <header class="site-header">
-          <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
-          <p class="site-date">December 31, 2026 <span style="color: #F5A623;">✦</span> Boston, Massachusetts</p>
-          <div class="site-date-mobile">
-            <span class="date-line">December 31, 2026</span>
-            <span class="date-divider"></span>
-            <span class="location-line">Boston, Massachusetts</span>
-          </div>
-        </header>
-        
-        <!-- Desktop Navigation -->
-        <nav class="site-nav">
-          <a href="#" onclick="showSection('home')" class="active">Home</a>
-          <a href="#" onclick="showSection('photos')">Photos</a>
-          <a href="#" onclick="showSection('qa')">Q + A</a>
-          <a href="#" onclick="showSection('travel')">Travel</a>
-          <a href="#" onclick="showSection('things')">Things to Do</a>
-          <a href="#" onclick="showSection('registry')">Our Registry</a>
-        </nav>
-        
-        <!-- Home Section -->
-        <section class="page-section active" id="section-home">
-          <h2>Welcome</h2>
-          <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
-          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-        </section>
-        
-        <!-- Photos Section -->
-        <section class="page-section" id="section-photos">
-          <h2>Photos</h2>
-          <p>A collection of our favorite moments together.</p>
-          <div class="photo-grid">
-            <!-- Photos will go here -->
-          </div>
-        </section>
-        
-        <!-- Q+A Section -->
-        <section class="page-section" id="section-qa">
-          <h2>Q + A</h2>
-          <p>Answers to frequently asked questions about our wedding.</p>
-        </section>
-        
-        <!-- Travel Section -->
-        <section class="page-section" id="section-travel">
-          <h2>Travel</h2>
-          <p>Information about getting to Nantucket and where to stay.</p>
-        </section>
-        
-        <!-- Things to Do Section -->
-        <section class="page-section" id="section-things">
-          <h2>Things to Do</h2>
-          <p>Our favorite spots and activities on the island.</p>
-        </section>
-        
-        <!-- Registry Section -->
-        <section class="page-section" id="section-registry">
-          <h2>Our Registry</h2>
-          <p>Thank you for thinking of us!</p>
-        </section>
+        <!-- Scrollable content container (on mobile, this scrolls below the fixed top bar) -->
+        <div class="mobile-scroll-container">
+          <!-- Site Header -->
+          <header class="site-header">
+            <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
+            <p class="site-date">December 31, 2026 <span style="color: #F5A623;">✦</span> Boston, Massachusetts</p>
+            <div class="site-date-mobile">
+              <span class="date-line">December 31, 2026</span>
+              <span class="date-divider"></span>
+              <span class="location-line">Boston, Massachusetts</span>
+            </div>
+          </header>
+          
+          <!-- Desktop Navigation -->
+          <nav class="site-nav">
+            <a href="#" onclick="showSection('home')" class="active">Home</a>
+            <a href="#" onclick="showSection('photos')">Photos</a>
+            <a href="#" onclick="showSection('qa')">Q + A</a>
+            <a href="#" onclick="showSection('travel')">Travel</a>
+            <a href="#" onclick="showSection('things')">Things to Do</a>
+            <a href="#" onclick="showSection('registry')">Our Registry</a>
+          </nav>
+          
+          <!-- Home Section -->
+          <section class="page-section active" id="section-home">
+            <h2>Welcome</h2>
+            <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
+            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+          </section>
+          
+          <!-- Photos Section -->
+          <section class="page-section" id="section-photos">
+            <h2>Photos</h2>
+            <p>A collection of our favorite moments together.</p>
+            <div class="photo-grid">
+              <!-- Photos will go here -->
+            </div>
+          </section>
+          
+          <!-- Q+A Section -->
+          <section class="page-section" id="section-qa">
+            <h2>Q + A</h2>
+            <p>Answers to frequently asked questions about our wedding.</p>
+          </section>
+          
+          <!-- Travel Section -->
+          <section class="page-section" id="section-travel">
+            <h2>Travel</h2>
+            <p>Information about getting to Nantucket and where to stay.</p>
+          </section>
+          
+          <!-- Things to Do Section -->
+          <section class="page-section" id="section-things">
+            <h2>Things to Do</h2>
+            <p>Our favorite spots and activities on the island.</p>
+          </section>
+          
+          <!-- Registry Section -->
+          <section class="page-section" id="section-registry">
+            <h2>Our Registry</h2>
+            <p>Thank you for thinking of us!</p>
+          </section>
+        </div>
       `;
     }
     
