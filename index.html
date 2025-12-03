@@ -89,6 +89,7 @@
     }
     
     body.content-visible {
+      display: block !important;
       background: #faf9f7;
       align-items: flex-start;
       padding-top: 0 !important;
@@ -97,6 +98,7 @@
       padding-bottom: 0 !important;
       overflow-y: auto !important;
       overflow-x: hidden !important;
+      height: auto !important;
     }
     
     .container {
@@ -247,6 +249,8 @@
       opacity: 0;
       transition: opacity 2s ease-in;
       font-family: 'Raleway', sans-serif;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     
     /* Site Header */
@@ -680,7 +684,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v40)"
+          placeholder="Enter password (v41)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
