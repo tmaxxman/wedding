@@ -617,7 +617,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v15)"
+          placeholder="Enter password (v16)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -791,7 +791,7 @@
             
             // Show main content (but keep it transparent first)
             const mainContent = document.getElementById('mainContent');
-            mainContent.style.display = 'flex';
+            mainContent.style.display = 'block';
             mainContent.style.opacity = '0';
             
             // Force reflow to ensure initial state is applied
