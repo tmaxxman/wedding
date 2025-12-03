@@ -253,15 +253,9 @@
       overflow-x: hidden;
     }
     
-    /* Desktop fixed header container */
-    .desktop-fixed-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+    /* Desktop header container - scrolls with page on desktop */
+    .desktop-header {
       background: #faf9f7;
-      z-index: 1001;
-      border-bottom: 1px solid #eee;
     }
     
     /* Site Header */
@@ -383,15 +377,8 @@
       color: #333;
     }
     
-    /* Scrollable content wrapper - works on both desktop and mobile */
+    /* Scrollable content wrapper */
     .scroll-container {
-      position: fixed;
-      top: 220px; /* Height of desktop fixed header */
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
       background: #faf9f7;
     }
     
@@ -588,14 +575,20 @@
         font-size: 1.8em;
       }
       
-      /* Mobile: scroll container starts below mobile top bar */
+      /* Mobile: scroll container is fixed below mobile top bar */
       .scroll-container {
+        position: fixed;
         top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
       }
       
-      /* Hide desktop fixed header on mobile */
-      .desktop-fixed-header {
+      /* Hide desktop header on mobile */
+      .desktop-header {
         display: none;
       }
       
@@ -728,7 +721,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v43)"
+          placeholder="Enter password (v44)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -938,8 +931,8 @@
       const content = document.getElementById('mainContent');
       
       content.innerHTML = `
-        <!-- Desktop Fixed Header (names, date, nav) -->
-        <div class="desktop-fixed-header">
+        <!-- Desktop Header (names, date, nav) - scrolls with page -->
+        <div class="desktop-header">
           <header class="site-header">
             <h1 class="site-title">MEGHAN <span class="ampersand">&</span> NOLAN</h1>
             <p class="site-date">December 31, 2026 <span style="color: #F5A623;">✦</span> Boston, Massachusetts</p>
