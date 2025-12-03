@@ -732,7 +732,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v52)"
+          placeholder="Enter password (v53)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -1084,6 +1084,10 @@
         mobileTitle.textContent = titles[sectionId];
       }
       
+      // Update URL without page reload
+      const path = sectionId === 'home' ? '/' : '/' + sectionId;
+      window.history.pushState({ section: sectionId }, '', path);
+      
       // Close mobile menu if open
       const menu = document.getElementById('mobileMenu');
       const hamburger = document.querySelector('.hamburger');
@@ -1092,6 +1096,54 @@
       
       return false;
     }
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.section) {
+        showSectionFromUrl(e.state.section);
+      } else {
+        // Default to home if no state
+        showSectionFromUrl('home');
+      }
+    });
+    
+    // Helper function to show section without modifying history
+    function showSectionFromUrl(sectionId) {
+      const titles = {
+        'home': 'M & N',
+        'photos': 'Photos',
+        'qa': 'Q + A',
+        'travel': 'Travel',
+        'things': 'Things to Do',
+        'registry': 'Our Registry'
+      };
+      
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      document.querySelectorAll('#section-' + sectionId).forEach(section => {
+        section.classList.add('active');
+      });
+      
+      document.querySelectorAll('.site-nav a, .mobile-menu a').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      const mobileTitle = document.getElementById('mobilePageTitle');
+      if (mobileTitle && titles[sectionId]) {
+        mobileTitle.textContent = titles[sectionId];
+      }
+    }
+    
+    // Load correct section on page load based on URL
+    window.addEventListener('load', function() {
+      const path = window.location.pathname;
+      const sectionId = path === '/' ? 'home' : path.substring(1);
+      if (sectionId && sectionId !== 'home') {
+        showSectionFromUrl(sectionId);
+      }
+    });
     
   </script>
 </body>
