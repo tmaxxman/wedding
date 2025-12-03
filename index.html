@@ -732,7 +732,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v55)"
+          placeholder="Enter password (v56)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -887,8 +887,13 @@
             const data = JSON.parse(decryptedContent);
             displayContent(data);
             
-            // Load correct section based on current URL
-            const path = window.location.pathname;
+            // Load correct section based on current URL or redirect from 404
+            let path = sessionStorage.getItem('redirect');
+            if (path) {
+              sessionStorage.removeItem('redirect');
+            } else {
+              path = window.location.pathname;
+            }
             const sectionId = path === '/' ? 'home' : path.substring(1);
             if (sectionId && sectionId !== 'home') {
               showSectionFromUrl(sectionId);
