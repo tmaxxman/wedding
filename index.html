@@ -732,7 +732,7 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v54)"
+          placeholder="Enter password (v55)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
@@ -886,6 +886,13 @@
           try {
             const data = JSON.parse(decryptedContent);
             displayContent(data);
+            
+            // Load correct section based on current URL
+            const path = window.location.pathname;
+            const sectionId = path === '/' ? 'home' : path.substring(1);
+            if (sectionId && sectionId !== 'home') {
+              showSectionFromUrl(sectionId);
+            }
             
             // Hide password page
             document.getElementById('passwordPage').classList.add('hidden');
@@ -1135,15 +1142,6 @@
         mobileTitle.textContent = titles[sectionId];
       }
     }
-    
-    // Load correct section on page load based on URL
-    window.addEventListener('load', function() {
-      const path = window.location.pathname;
-      const sectionId = path === '/' ? 'home' : path.substring(1);
-      if (sectionId && sectionId !== 'home') {
-        showSectionFromUrl(sectionId);
-      }
-    });
     
   </script>
 </body>
