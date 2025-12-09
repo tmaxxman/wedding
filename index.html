@@ -125,6 +125,16 @@
       z-index: 1;
     }
     
+    .version-number {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      color: rgba(68, 68, 68, 0.5);
+      font-size: 12px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      z-index: 10;
+    }
+    
     .password-page h1 {
       color: #fff;
       margin-bottom: 20px;
@@ -151,12 +161,12 @@
       margin: 0;
       height: 50px;
       background: transparent;
-      color: #fff;
+      color: rgba(68, 68, 68, 0.6);
       text-align: center;
     }
     
     .password-input::placeholder {
-      color: rgba(200, 200, 200, 0.9);
+      color: rgba(68, 68, 68, 0.6);
       font-style: italic;
       text-align: center;
     }
@@ -403,7 +413,7 @@
     
     .mobile-top-bar-title {
       position: absolute;
-      top: 50%;
+      top: 58%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-family: 'Sacramento', cursive;
@@ -449,6 +459,18 @@
       border: none;
       cursor: pointer;
       padding: 10px;
+    }
+    
+    /* Large clickable area for hamburger menu */
+    .hamburger-click-area {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 25%;
+      height: 100%;
+      z-index: 1001;
+      cursor: pointer;
     }
     
     .hamburger span {
@@ -551,7 +573,7 @@
     /* Page sections */
     .page-section {
       display: none;
-      padding: 60px 20px;
+      padding: 0 20px 60px 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -578,6 +600,100 @@
       margin: 0 auto 20px;
     }
     
+    /* Events list styling */
+    .events-list {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+    
+    .home-hero-image {
+      max-width: 750px;
+      width: 100%;
+      max-height: 420px;
+      margin: 0 auto 20px;
+      display: block;
+      border-radius: 8px;
+      object-fit: cover;
+      object-position: center bottom;
+    }
+    
+    .event-item {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 40px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .event-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 2em;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+    
+    .event-date {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    
+    .event-time {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.3em;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .event-after-party {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1em;
+      color: #555;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    
+    .event-after-party-time {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.3em;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .event-venue {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1em;
+      color: #444;
+      margin-bottom: 5px;
+    }
+    
+    .event-location {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .event-attire-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .event-attire {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1em;
+      color: #333;
+    }
+    
     /* Photo grid */
     .photo-grid {
       display: grid;
@@ -598,6 +714,14 @@
         display: none;
       }
       
+      .home-hero-image {
+        display: none;
+      }
+      
+      .event-item {
+        margin-bottom: 30px;
+      }
+      
       .mobile-top-bar {
         display: block;
       }
@@ -613,6 +737,10 @@
       }
       
       .hamburger {
+        display: block;
+      }
+      
+      .hamburger-click-area {
         display: block;
       }
       
@@ -781,7 +909,7 @@
   <!-- Video Background (only visible on password page) -->
   <div class="video-background">
     <video autoplay muted loop playsinline preload="auto">
-      <source src="disco-ball.mp4" type="video/mp4">
+      <source src="disco-ball-shifted.mp4" type="video/mp4">
     </video>
   </div>
   
@@ -793,12 +921,13 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v83)"
+          placeholder="Enter password"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
       </div>
       <div id="errorMessage" class="error-message"></div>
+      <div class="version-number">v106</div>
     </div>
     
     <!-- Main Content (hidden until password correct) -->
@@ -823,7 +952,7 @@
     })();
     
     // Encrypted wedding content (generated by build.js)
-    const ENCRYPTED_DATA = '{"salt":"46fd5dc837609d57fa01439931353d62","iv":"7e7af688d1bdf4123c30e2fea78a8bd6","authTag":"5a1191777cca1ba855868f1564a228e8","content":"2cb960f41e222b0a9f4c28683b1c1974f6a2cfae87a3292da136cfa19ace26b2e8e47933111162e7912006c6e412214a450be5f64f207d566a93c0b28eec6fd001bce71af81292f62f90b0f6587037944e8454e367a3e7bfb9dc0c3776508ff43eac6b60fae9c8bed6cd1605a17c4a0c5f7ba56b3dedeeabda0d75ab926ca1519991fb47fa25ab64a990eb931633f49ff18714ed3fbb8bf0d19ad066222a41f5a1f59d981cc5028ab1b234bf46a4b9d527e1fe8393e9299faa2a36825c0580fec6d18523949af0df2aaa9400350a9e6e3b2940c35449a5642047dbcb0d7d57da95ccaf11c5c85d3797c91fc04f5ff419114802c1538be08845ccd7c278d10a35e651ba82fd80681ebab03a3cfd14b60c6c31cd45c4813e7cc3b81dd24b5a541c5dbcd9ddf74489f5d67cc38f357788af8b37a485da7125fe773cf5328c147a96654853aa5ec3e5ba8b147ec9e78f83ac7c7d8f50a70f8d4a47c66198497f11fb75bc9c038233d4f17d6351e5199ba3c60147041cc8194a8171ecf60e1a61f06fc07a8853ddcbe0e7c613422f8220db44c23ec208cbc7fa520409bde6d83e557906b41a01aee21e1343228a8b727e3898dbbf9bbbb81424281f91c84451e205ab92581718531bcc383a60254991727fb4747b255ceaea1a8106094361d0206714fe56a74961cc130617ab622509faee9db66459d28d72291b72a770e12a301d1b128ad64dac5c8455e5a52014fa4cb6b8ecc50c23a0b99a48ac00a3fc5059405c5aa8d7c423d974f6f3a673a710f8f0903032676369256dddca1c2cb9fc55dcf99013d0ecdb3576d9bbc206636930fe2169ec4f4e684a76ba89d956d16e51e1f749e66a16958440f4a0bb98554f50b87a22a9cb44f043334a5ea950fc019145de4afb24a2f887d1b02af29007623827a0fd1de5815547ff7d43f967ff27a5b68c449527236995fa7f8e868125dfbfbbace926048de1a67452a061e2fe89bfeb6c230a98b7e9ebd27d19aea27ca0de099452edaa22a5109385a567cb5a43ded1278368763de31c5954dc853137bab885c54cd6d82a756403d52bfccd20075aff0f55f4ada9aa573b45030b8a058768b47817b5ed74f7f164ad8848e1cfcab9bab95ec66db78b54fd084259ecb44c85818a7b88b0c74cc91c9a4caa990be4a870a7a0c9367d8b72a9726b84c8010594874831b530929a7a234122a416e81e4ab44bf2b584196b0af2cb4f1f203ea0037e05dfc48bcab0e1928f1be6295402ddee63bf863b804833e3a0f9fdb5fa3e26779f5b51d975581bef7880e1f0ad26d1935881c703980961d6e7694c5028ecfc39553f46d755d7fc7ec4aebe0b67ea9f46974c6c32b0e9ae8cc6d785b5887cd193fc5f9637bd55ab18241b693edde8bb21da0f594872260f50ab12efe1c6dabe2ea4019509019b554f057f884a22a7620220593be9714079736d2ab1ca69ed42080aa619d3734f84eff4ffdc0b068e9e0227d7eda720d9a2f560267dfe01a85348b7a4a5beb477d5006bf3028c7997619f9412787c337ecda6423596cb98f0b23aac01b9cca7a1bff72ba2003d1c7b6f5ba5686c4d50e376258786f5bd9ef176608a51d24ae14b2425f44fda719fbba1ed14d986b3a366100c16a0438e4f331cde96da3571de7fd00f672dc842b431eb340a1b9dc35cedb87b2ba5638877f715fb4e149b17ea7f2375895fb2a0feb16970d43263c4d1a2ff9e1628866c4c7b723cf0ca1d893ae90d0900156b8606fad9808cabb7089c3daa76ad16933102d91b2d438b67016157244412b6a9a7a4d26f6d7828af4adcc22937048065c4b7bc78aaf5858606a25b4f54622ef4c76e51998b92069e1563a1e7a5a2128c227acb10b802895df3a1953852a7733a6bcf0f9f8fd89f9ae1ff4a8205952b96f2d8f40829e01ef7585546be0cfab6d8a384632d449333867be45d49a60790fa028dd990e2f46635d4470ffb6afc8dc32e1f810824a6f93dbd94b7d470b00834af5ea2cd1416cbd224d118d2c46531c620f5702104df6b3aab974d5242dc4f8cfbe9bf002e94f24c81db9118988760736a36c35d7e281c61a60a06f5179ab63dc94f8204112eefa03c0e7389caa2354da894b85ca69ea03bccc1dcc58309f55a965a0f6a2d5ea21abfd92e1fc69bde65769090674b8fcbc67bc55a1f441b780b2d438c9fd696c28966e1bd72a37eb6f6709af71c0f17f9b1a4d57f448093cb235565"}';
+    const ENCRYPTED_DATA = '{"salt":"7eb91cbe249a769b2c64e1e0b375ace1","iv":"d0607607feae7101628577522d9e6819","authTag":"03de085a0305fc14b9e874e6761fff25","content":"3ff543074abbb9f95f20658bf6c05ee8bd58c9e1a7ab3b45cde3bd9f4278d1866499f663e28234c6311bd48dddc22a8a0df75a7f0126a9d9f7ca5ea93f30680dd23375660bcd0530519034d4a96824f6adf32cc1d8f66d4d87b275cb63b6e81a5f0e720c0e25437ec00abef665c64f67c7cfb319855f548665db76e6ec32dbccc997ab653d42e2e998a99d010ff25fbba6c722fedd82d5587dcb9545e0d3a1eb7c836fe628a0488939fcff8581e3f10308f21a159927e95a2f1e940557960b115a6e40fa172d58e2dc929a82ab63c17f1e36034efdcf2ae0e7ef0377f9d5bd3577dbf9ca6f3338ea315c22ec9df428ad56037565de0af646b3159d6aa38236c24c727d56689fb4eacdd29e42ec572bb34e044509b3e7ff3d83e53d543fb4971504fbe561ad41b91637fe8046d30c588ee2d942986f696bf604ee5cd4f5da4bde87b266e0ac6e65e4d66e00aff6e04d6a6cbd7ce7a875fd5f242ecae68f625ae428ddebee7221bb344a3e1e747ba532606b7276e683cd543f06d71e48a7d666284f10ebc1d7ea33473f210d95f8b0ef01da14ed2fc1981cbc720af2ae3b9754f03b18e20cdca447ebf6a64c9eff53b1022cb9437c2d6dd6347504f96d5f431902b57bb5dd8b6312c9331b856cc9ab0b8c4b1b39a6679f588198dd9f0250dd9aefa23be5139792b2b6096a5fe612cf2fcc0112ab4f0e13c94d426531cb180f0331cf6dd95fb5ec4581497471336d38f8842c92650509b694666229abdcb0b93d2e46fbbd08862cd60aaaa976bc0f5f00d0f556ff3a001b4ce87a10a57cc08150f6ec7b37b10b8974961126846c17be514861026ebbbdb879e09e334d322d1fd857d02d3476e8915a93c41072371b46c3bd1599b9376377d4dd0ef8a66adfff4dd73c96ad96fdd583f24e2f338b9be835d63490e07ca218b3e0afac7157a86fe424aa20a72eb8805fe913fcea2dcc85d41124ef44cd929be7d4fdef1179640e126dea707f958fd096b5656b70c0d4fbe18f461c6548adefa736428436b7a328b1296379b0b1378a239a65729f676a364df50dac34577dd9d26086e2acb3234fec386141fec7c2b8347d662b18bfe3f3dcc67a37a16a50b6fdfa0ac214aab6adf9bd90091b37cb6cc364a16b3d911af9f84f3344284dfb75b406d88b6a5a39917ec247df6fb26ef5844bbee71e8cb7a1fc59f859abc97f011afa9cadec34b53e19852fa6c6c4b395b8ba3114c6d4fb396094d9530f49c4b92e69c028ee12eda1687b903feebe732c6550d0a0718ee31f7603a8649f59cb30ddee0451f36e2d6583ed641a8b390e9d4e86e212e412c510696e604f1989bc6ed955d2cae6bccc224050652dccde975e08a5fbfa08884e32ee97477f7149bc96f7b3d76fe1a9a22bab220046e7c1a1e7fda32882216bc2500720d4"}';
     
     // Decrypt function using Web Crypto API
     async function decryptContent(password, encryptedPayload) {
@@ -931,10 +1060,10 @@
       const decryptedContent = await decryptContent(password, ENCRYPTED_DATA);
       
       if (decryptedContent) {
-        // Success! Show "Access Granted" in green
+        // Success! Show "Welcome!" in green
         const passwordInput = document.getElementById('passwordInput');
         passwordInput.type = 'text';
-        passwordInput.value = 'Access Granted';
+        passwordInput.value = 'Welcome!';
         passwordInput.classList.add('granted');
         passwordInput.disabled = true;
         
@@ -1019,16 +1148,33 @@
     function displayContent(data) {
       const content = document.getElementById('mainContent');
       
+      // Generate events HTML
+      let eventsHTML = '';
+      if (data.events && data.events.length > 0) {
+        eventsHTML = data.events.map(event => `
+          <div class="event-item">
+            <div class="event-title">${event.title}</div>
+            <div class="event-date">${event.date}</div>
+            <div class="event-time">${event.time}</div>
+            ${event.afterParty ? `
+              <div class="event-after-party">${event.afterParty.text}</div>
+              <div class="event-after-party-time">${event.afterParty.time}</div>
+            ` : ''}
+            <div class="event-venue">${event.venue}</div>
+            <div class="event-location">${event.location}</div>
+            <div class="event-attire-label">Attire: ${event.attire}</div>
+            ${event.attireNote ? `<div class="event-attire">${event.attireNote}</div>` : ''}
+          </div>
+        `).join('');
+      }
+      
       const sectionsHTML = `
         <!-- Home Section -->
         <section class="page-section active" id="section-home">
-          <h2>Welcome</h2>
-          <p>We are so excited to celebrate our wedding with you! Please explore this site for all the details about our special day.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
-          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+          <img src="ducklings_in_the_snow.jpg" alt="Ducklings in the snow" class="home-hero-image">
+          <div class="events-list">
+            ${eventsHTML}
+          </div>
         </section>
         
         <!-- Photos Section -->
@@ -1049,13 +1195,13 @@
         <!-- Travel Section -->
         <section class="page-section" id="section-travel">
           <h2>Travel</h2>
-          <p>Information about getting to Nantucket and where to stay.</p>
+          <p>Information about getting to Boston and where to stay.</p>
         </section>
         
         <!-- Things to Do Section -->
         <section class="page-section" id="section-things">
           <h2>Things to Do</h2>
-          <p>Our favorite spots and activities on the island.</p>
+          <p>Our favorite spots and activities in Boston.</p>
         </section>
         
         <!-- RSVP Section -->
@@ -1094,6 +1240,7 @@
         
         <!-- MOBILE: Fixed top bar + scrollable content below -->
         <div class="mobile-top-bar">
+          <div class="hamburger-click-area" onclick="toggleMobileMenu()"></div>
           <button class="hamburger" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
