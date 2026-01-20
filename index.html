@@ -405,6 +405,7 @@
       font-weight: 400;
       letter-spacing: 1px;
       color: #333;
+      white-space: nowrap;
     }
     
     /* Desktop scroll container - full page scrollable */
@@ -1116,6 +1117,227 @@
       }
     }
     
+    /* Mobile: hide header on Travel page */
+    @media (max-width: 768px) {
+      .travel-page-active .mobile-scroll-container .site-header {
+        display: none;
+      }
+      
+      .travel-page-active .travel-container {
+        padding-top: 30px;
+      }
+    }
+    
+    /* Hotels & Travel page styles */
+    .travel-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-bottom: 60px;
+    }
+    
+    .travel-section {
+      margin-bottom: 50px;
+    }
+    
+    .travel-section h2 {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 2em;
+      font-weight: 400;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    
+    .hotels-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .hotel-item {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 20px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .hotel-name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px;
+    }
+    
+    .hotel-name {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+    
+    .hotel-walk-time {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9em;
+      color: #666;
+      font-style: italic;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .hotel-note {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9em;
+      color: #666;
+      font-style: italic;
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    
+    .alert-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    
+    .hotel-links {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    
+    .hotel-link {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9em;
+      color: #f3722b;
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid #f3722b;
+      border-radius: 20px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .hotel-link:hover {
+      background: #f3722b;
+      color: white;
+    }
+    
+    .hotel-link.room-block {
+      background: #f3722b;
+      color: white;
+    }
+    
+    .hotel-link.room-block:hover {
+      background: #d45d1a;
+      border-color: #d45d1a;
+    }
+    
+    .travel-info {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .travel-mode {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 25px;
+    }
+    
+    .travel-mode h3 {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1.3em;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .travel-icon-container {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .travel-icon {
+      width: 32px;
+      height: 32px;
+      filter: brightness(0) saturate(100%) invert(48%) sepia(85%) saturate(1703%) hue-rotate(347deg) brightness(98%) contrast(93%);
+    }
+    
+    .travel-icon.plane {
+      width: 38px;
+      height: 38px;
+      animation: plane-fly 3s ease-in-out infinite;
+    }
+    
+    .travel-icon.train {
+      animation: train-chug 0.4s ease-in-out infinite;
+    }
+    
+    @keyframes plane-fly {
+      0%, 100% {
+        transform: translateY(0) rotate(-4deg);
+      }
+      50% {
+        transform: translateY(-7px) rotate(4deg);
+      }
+    }
+    
+    @keyframes train-chug {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-1px);
+      }
+      75% {
+        transform: translateX(1px);
+      }
+    }
+    
+    .travel-mode p {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1em;
+      line-height: 1.7;
+      color: #444;
+      margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+      
+      .hotel-note {
+        text-align: left;
+        justify-content: flex-start;
+      }
+      
+      .hotel-links {
+        align-self: flex-start;
+      }
+    }
+    
     /* Bouncing question mark screensaver */
     .qa-bouncer-container {
       position: fixed;
@@ -1376,7 +1598,7 @@
     // This properly handles iOS keyboard open/close without JavaScript manipulation
     
     // Encrypted wedding content (generated by build.js)
-    const ENCRYPTED_DATA = '{"salt":"316cb98b99b845664540bbcc311cdeed","iv":"098471a2e713cc148178abac8de1f0b7","authTag":"731f01230c8e09eb49a93ba8f9cdf978","content":"29147e01de41147011532bad3c093e81f20b2b8fbaa540386b7ef3720fd8168a78c08ad3601f9fc8431e371cdc92ea759bb816526424e59c85881f84763c790819bc11dd1ee7fad784c701168dc5d22013e82c139f698d5feb07fe4ce5b490cc5ee09e5c3f132c8b6cd76e0fe7c64a6009077bf5d3b72c410caf0e28781c7a8c64736d939d3e304afe9abbbe9cc020c5234b7e754003b0682788312b0023f3a5ef8cb63215911f0d59918df7e0bcc52601df17a751cea933dad5361c0d8eb3d2629247fb364f96170e7306de2d4e687d31cde2bff8e0b5e9500b2cc7e1c411835e01028e3ba041449296897106716c612feca222e8b593762948bc1eaadc998c372c77e548935a6e698d0f5153d77cb59bfa05b516b20208a66c688ea78be9552cde14eca8af227c6cf622fc19cab68a1ae3ec0fcc925d6940de2b901648e9e6b59fbbac9ef1bc894113c3e9ac2e1aef3017fbaa7dd0dd29f59944ed4c25b59eca2a139c3ec6d5c62ed706609acf1ad31df0ff7f0d1f1f63d7441399aa0c7cf7baff996584b526e2d7876e51d512b975d443010fc4c9ce6bcb7d58e85f4284806ca49d3d168f85fb4b71a6fcc15a69a88b2188aa04f6253c6bcaf9830a66a2514904dae457275009343e3a5ffdc94643075d0645acdde30db7ff6d1896e0cb19294e27cb469644eebbc0597d2645edd7fc4addc99e54f108ee513b4b94fa55cc40f18e446c4c2a1e481a9f9f4862d6e2021f029a09eca8a20d210f2ec8585ec2fce2e18627a8b048d4ca38c53cbc456aa151f5591cf8de89d5b3c594b1670e942a7377c81b98372491088a18d49778c1ec5021acd7fe15bc61e840a9826b7fae566282d1ca81759b802d920f6ffe6e94407bfc1c7d278f83d11b5d7d30922786936e1b2f181d5ce674bc894cab795821e7f96fc7fe5f78966fe68fc3410ace2e7f0dd9b28ab4d4949e6bc0cd29c5f4b1b2e2d3f2d459fe626859ccb2cf98e8ee1fe49b186315e7fab31db919b3715c39a556e02ee703c6c419e8cab1ea75cbcb8ea5a79cdb673b9ecc858d93a7b29e5d330f0eeed2bb53d1ec11d250ca0349f96c7d6a5542c48d8c98a9c9c06b0f7cbc97c1817d37d0ad80ba03b0c38dcf260e3d9184c27453db38862880d66aa10fb1a8cb287cd4c782bc1ce3f5ab28ef1e274b382c3f2726b86d965e3ac5ec13f7f237bfbcf03546e16fe1759c91c45b6899695cf2254e03207f66cc1edf1c493c12badac1338576ed70fc59d02fb0f999a4e0a629179f81f0f1ec040fe325b268d044d144f0f4c9fb99c5013096ec4f77082b2c5031eb12c7e54ac93bdb15ce2cf6094fe426dce608426b3a13700557d8c3cce8a642263adf637af43673a50c48af93504c824ba68a1aafd5a4ddd02908ccf074ff0a19ac4a1d11ebfd38d3f246b39423cf4e6820576931ab37e17b8d24314f2d00c3e34fb828c5fa8287481ebee88b22a9eca50ab151dd926b72b7ca4f049b980dc55dcde6fa68"}';
+    const ENCRYPTED_DATA = '{"salt":"05d08881fcd7dd8461896649df03c8a4","iv":"34ee00d75d62d6b96f60ce9639a33341","authTag":"e68b49e02101937330c5c6372796c92c","content":"daea81ba29c6d73bcd9a938a4801353ab498067fb9956602a99c1b58d9bed061d5e23a3409bc8309237e562b9cc2ab23e160c2c87b5e7e4f8eecc55e0011923bd084d0754eb6392ebc8abc4e4b074de7acc3d87a86a10d06f157e635856193ca821670232a304c94f5825181b5b9b2bd707cc52a203f7b29784ef5406c856239acf84a60eee12a7e3218ebd499b9c22f487bc9e02a9317717d990a9e2630918d6d3df531d0148c78d1710d58299e398d32ffd2dc83da8581a8ebbe8ab645ad44c22da55777bf11703d33268c5117ceafca9b8cf930ebfa9d6763ec46fd4242bb366b0a4605def6b6e7683e510899ebe2f935c8375f1873aaf959a6d291eef891a502b698b23fcbc32de4a6004a5e09a6cc49da0d62fdd6c6349ec1613368e45a3f38819ebb6a8a0e6443be5c56cff03fd2cc01c760aee22d6b1f8ba61952efa0c1d9b1eac464eef70ef2515284920a93935bbf8500bbe8e7361ae2a78cd9fadace35d83f58aea65465b4834fbec28cdb2ae0206144b2fdfcceaaa6bf49d0509e3bff056898b11a89a6d3518b1fa111f2b136ac9649dc51008e6acf690d3906de3f9d07f810f4f2d9e263f63bf198723f0957e8d944981a99d4f79bb0397e77d52060f95d446583b9675d123e72b19682053e7b04d92371eb141a346a612806340bc1378bff69f3780ef3012a9f12b2843ca464cf755b78eee7620fd64a8e0988a2272106fb6c1f7a638f8080f949a8cf2587392bd3236dccf5fe3ecd07c5437fa43c406c3ed2844b45095334a1d5db8ab11ee5a06915012c375a9b58362bee4138cc9b1cc789d1d1133572f934a9a2c8fce43087901525b93c1aaf99bbccfc9c4d032167dc099c55a1fcc12748f332163cd8235e035aadbe56c2b9f20080188937971ac41249ee2205f35e57e6a2a504519fb2a3e7094a2b5669d77468160055987d64833d4887831065686cda6057079a1bd39d7101d8eb31f1ecd7dd7317b25adf788691f4846e4843211103d23bf01f81913f8f54351ac76f73dccc0d37ee2404acb23e1795b95054ea00e8637182e113e6daa879c6ce1e75163892dfb1c3c93638aa889c65f9eb64adef085db62d7d28132bde76af533653d9eb440abea1b876b17ba1e855eab00a2557fdaaed5bba986dcf401e504d0a0c956cb1d0a4c908031345a2b4c5335c8f4cab0ab34b9d85fb286d65ea3216a79d77cd91ab6a694adfd680c96f7d86fd13b3f8be4986cd1dae5f0a7fd99a278933208e2247fad7d22df902f66d687e89445cb80d00bdc67bf6ef84255da0d6a4133483d69388ec306ac75fb2edbfd77607f8e2571ca5b0540bd2b2d1cbbcdba66047a75eef0651088476f0ae390675565df317106f4e7ec152a48f59203fbc8fdbd3d91a0ba209b2290a0fd775ab416315e93445c88b930825cb4abab4bf7479e94c140006aed6c85cef16b75b82a0c65d87a987a90c66479427357c9d7c168ceb5706411bac144abe2e200146bd6afd"}';
     
     // Decrypt function using Web Crypto API
     async function decryptContent(password, encryptedPayload) {
@@ -1646,8 +1868,97 @@
         
         <!-- Travel Section -->
         <section class="page-section" id="section-travel">
-          <h2>Travel</h2>
-          <p>Information about getting to Boston and where to stay.</p>
+          <div class="travel-container">
+            <div class="travel-section">
+              <h2>Hotels</h2>
+              <div class="hotels-list">
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">The Newbury Boston</span>
+                    <span class="hotel-walk-time">The wedding venue! (~0 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://book.passkey.com/event/51077363/owner/50024227/home" target="_blank" rel="noopener noreferrer" class="hotel-link room-block">Book Room Block</a>
+                    <a href="https://maps.app.goo.gl/HweK2q2Zr8qr7QeL6" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">Hilton Boston Park Plaza</span>
+                    <span class="hotel-walk-time"><img src="icons/warning.svg" alt="Alert" class="alert-icon">Room block coming soon (~4 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.hilton.com/en/hotels/bossrhh-hilton-boston-park-plaza/?SEO_id=GMB-AMER-HH-BOSSRHH" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://maps.app.goo.gl/RHAB8psEcVnuiM589" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">Four Seasons Boston</span>
+                    <span class="hotel-walk-time">(~5 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.fourseasons.com/boston/" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://maps.app.goo.gl/D7YisFzCuLRWH4Ti8" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">Hotel AKA Back Bay</span>
+                    <span class="hotel-walk-time">(~8 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.stayaka.com/locations/boston" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://www.google.com/maps?q=Hotel+AKA+Back+Bay,+154+Berkeley+St,+Boston,+MA+02116" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">W Boston</span>
+                    <span class="hotel-walk-time">(~11 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.marriott.com/en-us/hotels/boswh-w-boston/" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://maps.app.goo.gl/5w9rocTUL5XbAZ4e8" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">The Revolution Hotel</span>
+                    <span class="hotel-walk-time">(~13 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.therevolutionhotel.com/" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://maps.app.goo.gl/p9hGb1KiwWCMr8cg6" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+                <div class="hotel-item">
+                  <div class="hotel-name-row">
+                    <span class="hotel-name">Boston Marriott Copley Place</span>
+                    <span class="hotel-walk-time">(~17 min. walk)</span>
+                  </div>
+                  <div class="hotel-links">
+                    <a href="https://www.marriott.com/en-us/hotels/bosco-boston-marriott-copley-place/" target="_blank" rel="noopener noreferrer" class="hotel-link">Website</a>
+                    <a href="https://maps.app.goo.gl/H742ucT8Uhq1gq126" target="_blank" rel="noopener noreferrer" class="hotel-link">View on Map</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="travel-section">
+              <h2>Travel</h2>
+              <div class="travel-info">
+                <div class="travel-mode">
+                  <h3><div class="travel-icon-container"><img src="icons/airplane.svg" alt="" class="travel-icon plane"></div>By Plane</h3>
+                  <p>Fly into <strong>Boston Logan International Airport (BOS)</strong>. From there, you can take a taxi, rideshare, or the MBTA to downtown Boston. The Newbury Boston is about 15-20 minutes from the airport by car, depending on traffic.</p>
+                </div>
+                <div class="travel-mode">
+                  <h3><div class="travel-icon-container"><img src="icons/train.svg" alt="" class="travel-icon train"></div>By Train</h3>
+                  <p>Take <strong>Amtrak</strong> to either <strong>Back Bay Station</strong> or <strong>South Station</strong>. Back Bay Station is about a 15-minute walk to The Newbury Boston, while South Station is about a 20-minute walk. Pick the station that's closest to your hotel!</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
         
         <!-- Things to Do Section -->
@@ -1954,7 +2265,7 @@
         'home': 'M & N',
         'photos': 'Photos',
         'qa': 'Q + A',
-        'travel': 'Travel',
+        'travel': 'Hotels & Travel',
         'things': 'Things to Do',
         'rsvp': 'RSVP',
         'registry': 'Our Registry'
@@ -2025,6 +2336,12 @@
           mainContent.classList.remove('qa-page-active');
           stopBouncer();
         }
+        // Travel page
+        if (sectionId === 'travel') {
+          mainContent.classList.add('travel-page-active');
+        } else {
+          mainContent.classList.remove('travel-page-active');
+        }
       }
       
       // Update URL without page reload (preserve base path)
@@ -2057,7 +2374,7 @@
         'home': 'M & N',
         'photos': 'Photos',
         'qa': 'Q + A',
-        'travel': 'Travel',
+        'travel': 'Hotels & Travel',
         'things': 'Things to Do',
         'rsvp': 'RSVP',
         'registry': 'Our Registry'
@@ -2124,6 +2441,12 @@
         } else {
           mainContent.classList.remove('qa-page-active');
           stopBouncer();
+        }
+        // Travel page
+        if (sectionId === 'travel') {
+          mainContent.classList.add('travel-page-active');
+        } else {
+          mainContent.classList.remove('travel-page-active');
         }
       }
     }
