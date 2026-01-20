@@ -17,26 +17,22 @@
     
     body {
       font-family: 'Georgia', serif;
-      background: #000;
+      background: #faf9f7;
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 20px;
-      padding-top: calc(58vh - 50px);
-      position: relative;
       overflow: hidden;
     }
     
     
-    /* Video background for password page */
+    /* Video background - fixed overlay that fades out */
     .video-background {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: -1;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
       overflow: hidden;
       opacity: 1;
       transition: opacity 2s ease-out;
@@ -45,26 +41,10 @@
     
     .video-background video {
       width: 100%;
-      height: 100vh;
+      height: 100%;
       object-fit: cover;
       object-position: center;
       pointer-events: none;
-    }
-    
-    /* Mobile: video stays fixed during password entry for reliable viewport coverage */
-    /* After content shows, video fades out so position doesn't matter */
-    @media (max-width: 768px) {
-      .video-background {
-        position: fixed;
-        /* Use dvh (dynamic viewport height) which properly handles iOS keyboard */
-        height: 100vh; /* Fallback for older browsers */
-        height: 100dvh;
-      }
-      
-      .video-background video {
-        height: 100vh; /* Fallback */
-        height: 100dvh;
-      }
     }
     
     /* Dark overlay removed for brighter video */
@@ -84,58 +64,29 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     
-    /* Fade out video on main content page */
+    /* Fade out video when content is visible */
     body.content-visible .video-background {
       opacity: 0;
-      transition: opacity 2s ease-out;
-      pointer-events: none;
-    }
-    
-    html.content-visible,
-    body.content-visible {
-      height: auto !important;
-      min-height: 100vh !important;
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
-    }
-    
-    body.content-visible {
-      display: block !important;
-      background: #faf9f7;
-      align-items: flex-start;
-      padding-top: 0 !important;
-      padding: 0 !important;
-      padding-bottom: 0 !important;
     }
     
     .container {
-      background: transparent;
-      border-radius: 0;
-      max-width: 100%;
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      z-index: 1;
-      margin: 0;
-      padding: 0;
-    }
-    
-    /* No background or box for main content */
-    .container.content-showing {
-      background: transparent;
-      box-shadow: none;
-      height: 100vh;
-      max-width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      /* Container just holds password page and main content */
     }
     
     .password-page {
-      padding: 60px 40px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      position: relative;
-      z-index: 1;
+      z-index: 200;
+      padding: 40px;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .password-page.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
     
     .version-number {
@@ -243,37 +194,32 @@
     }
     
     /* ========== MAIN CONTENT STYLES ========== */
+    /* Main content sits behind video/password, already in position */
     .main-content {
       display: none;
-      width: 100%;
-      min-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: #faf9f7;
-      opacity: 0;
-      transition: opacity 2s ease-in;
       font-family: 'Raleway', sans-serif;
       overflow-y: auto;
       overflow-x: hidden;
+      z-index: 50;
     }
     
-    /* When shown on desktop */
+    /* When shown - just display it, no animation */
     .main-content.shown {
       display: block;
     }
     
-    /* Mobile: main-content covers entire viewport as flex container */
+    /* Mobile: flex container for title bar + scroll area */
     @media (max-width: 768px) {
       .main-content.shown {
         display: flex;
         flex-direction: column;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        /* Don't use height - let top/bottom: 0 define it */
-        overflow: hidden; /* Children handle their own scrolling */
-        margin: 0;
-        padding: 0;
+        overflow: hidden;
       }
     }
     
@@ -1327,13 +1273,13 @@
           type="text" 
           id="passwordInput" 
           class="password-input"
-          placeholder="Enter password (v155)"
+          placeholder="Enter password (v156)"
           oninput="checkPasswordAsYouType()"
           onkeydown="if(event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); return false; }"
         />
       </div>
       <div id="errorMessage" class="error-message"></div>
-      <div class="version-number">v155</div>
+      <div class="version-number">v156</div>
     </div>
     
     <!-- Main Content (hidden until password correct) -->
@@ -1347,7 +1293,7 @@
     // This properly handles iOS keyboard open/close without JavaScript manipulation
     
     // Encrypted wedding content (generated by build.js)
-    const ENCRYPTED_DATA = '{"salt":"b6f8332f8bf0d88884da570a43c79d83","iv":"1a9f13bc5bcf97223a5f40b29df23297","authTag":"9e9c4edb2753e03086fbb04fe1a8e26f","content":"0c7cffc8785651a4b05700487f25de432beb18cfc516d360d541de4f7d001fdab7faae16b352ae6371eaf4196caa143ad622ebee87d3b459d980ae695534bf3261ef2f9a4dfa9a49a0b1f43dcb1538d776cec4acd67ca464737002931f966c4b20bd6021d05f84238f51ced3832d62bc129eb9ed93d502be9ddf7e950cb1aaf75dae31a9aa50507eb072e4e607395d101f2a2b5cf20d2eba2715227903e11ab9e387b6713672301ef900fd46e8c133f0e40ff78ceae4fda37f9499f5c91360ed1ce697f94cc88be782d608fa20ee89b962210608a1342c089941b982d3c5e28a84d80541d26f6e406c8a4650d40a3c6eb8527173ceff907b2c497226805c531a4c5b870717c53c5ea7d2ea20b8fb4493e5b1c46d36f2fee2c3c4de740443ca09b173f366893ace5910342ec197f3eebcc0c3cdcb3846fa6212504082431c0f8627fdddc8c1006b76e0b07f44b5fc666546a983db04f89414eb2e8ce245e0179263a5cbb11fa71e41141defdb6d95b5bf2a7614577352290a0d59471876d222e36fbfa71be2270a83c6e07a512661ab5753f8952c64161fcf37224d83aea63da5ba0e0d1748e746e6b62431f6b2b6b05e25377d9730d16b597cb4f43ebe1c9ffe31b36e5aa8ea71150f7477ae621573455a80679ed0b1d6607aa44e8aa9a84142ea594bd921131a5deda28cbbbbed716e25f46eef46763dd990a810fc9f792a2fa10f2fc4f91bdaae0a3c1a6a38a0623a5bd65acedf949ef3f6b957f3ce5b85436801e582b2b2392249c7d4bc81eb70023ab0b659df2c7f85e4f502c62148c708b3afd473a90e5d7af90c74953d6138318b420dd19721800381cafc6b6915f4efc91817582349c763afa99a7df086c405636378b94df31afdb3725c7811616745b1c96eac21ead208deae8f2c06d67bf716db1b5ce8f843f11a5baf1e7047bb21c9831bc71b1a22e19e5900468f043345726c02553ef898556caf9baa5b63db72039ca3ab896a7c7d51ccdaac9c3d7085203696a22490cf5f553d8ef302708bf1150a9680b08a4d29dd836586a1dd390a7f999b2d66d94b0c29009bb7f16495ecfa73a3c8b31f0f245cc26d1ba42f626cb8257cb5f95423e8571387bef3deda012050aeaa430f15e28ef4e37b21b74e60576a9ffe5361f134c4357a0221e5503cc72a5b9bc05cc294aa884a0e9bdd30a41e92c1158b16d3da189eca7b6c51a41eb6fb96c44d819bf35b2cc63584886df4be3e349783302bf202a2b35d35d8a1114c8641f39431573dbb2145a16e16938cc5cd77e80c00e570e8e96fcb75360697d8d40d57fea4501c8f032ea5a459de7610601302351c33f2e0f0b33b1ff24069587ffcd8eb815c335399e3b69dd9d1ad7b5f9a30470718659fefec6406eae3de4c2cb39dc19812586e524adac974263336"}';
+    const ENCRYPTED_DATA = '{"salt":"eae642d3676b5279ce2a20005f7616ef","iv":"275703715a5ad9ec1edc920f14bf64cd","authTag":"3efbecfe9e7a0d403ef9969fd7c0141b","content":"d244c82760bcfbc9e65f4bbefa115c0083c8095d98fc701f567f1f2a32fc0e74df445902bc8e56c59ce578262bc7c64feb32a32a63ef4da0221493101631efb80ea02c689e7e64f4450a1821921c92aeaa7873e24ad6f8f9400849dc0c75800b8724b836255a6d06b731d0776b5b493b1c7393fc44a3678da518d8199b0353dc2ce4410c18b54e8efea4c2b20c130ec324a5f4bbc61f144c8b9051568267927a095e57edc0a1790eea692f5e1ef2e1f7b67fec7cc4d9089e85dfc738c591e629edb35ee2645aa4ae04bc88be535fbf31268015dc11b6d32338a2383277e295555f7d5e8366576c7f0d7e944db80ae83bfafd9f5ba9c667be6006141413644ee101eafd36b67b0de5d10e592194c4faf2b875a9dc23a39403f05da3da27ac6493e09f223de486277a076ab71b06b0adbdd8b8b527426e70c0d35cd3447396c7d1aaab721b418fa5a0e85da88d2a3db8d4766019dcb9814bcb2bdef0400c7972f5320dabe0c4aeb85bef2149030f91ef5200b2a4334eee8367130a6da2e49c098c035405e5f98d8ce39575d1b44745fd783656f2353c47b0084b94cc51a7df1b377bdaa5d01cd28a359db26452b5f16fe9d927307ffa2be9bb7b3cfe6db2ba3a99cbf128512b87fb5381e05641b08826199af364c525ec654e10c29dcfc81014e445c49b426f2df477891ebbef3275328616da3e8a1f7deb03ee4be690e8bbe7d44ac1cf546497da1a434d95199f6f66664e7a6b5e3bd448de1e96927ebece6d2e635922859e24816655bfcc09c709f6967a3620c79bf92a7b48dbc76b685d719653a00018f2a3f29890939bc0d7dfccc4a10d28f5c1ff815c1f4781631bd06f750b80858891f34b96b66bf0c3dcba45302a428f1dd54e45c23eb50dca9b18004a77040fa583cc83e3f8988cce4d01fe17deb27cb213e94476c7e8408ba96912a3a1b63b7218aa5eb9dfffbfc9682dcbbe14a5fcc468884569bd22b434fbf1c8030cb0c72cb09adbed8409743324ae990d619d50b4e6fa6c14209ebe746d1a233f3ee9cbf1082379e8738d1c64d01d4c66d29f431f79d44e87a4b5607f5f491cb93edebd6bbbe54e4e1b99c0bc217697e3f9a5b05d279bad543dc60f4b9f459ff9233980299e0cb2479c287e00e81981f83dafbaa4081b55770867494075cf9808b7f388b2daa23c82a3106de7840f631c9ea503a9ac715ef25bc11dc78e147ff0b5bcaae7b2a5bd2a0cb83affa152cdf58736a933f1844df7515d3abcf931dae2ec7c711c7d33980c208d7f156fc6de22a9db4fcb731e2ec1c33cf8833a64e73b0d4a22b3516b30d963067865127c5dda2dd416150145fde7dad2491392f49dee8dac7a2bfab2623ac68e40cc1c7b9911c4e3c27aa59ad6b9add24ad0a467f5d908ced1e6b1faf0fc9f9f902ff182a156cd"}';
     
     // Decrypt function using Web Crypto API
     async function decryptContent(password, encryptedPayload) {
@@ -1490,43 +1436,23 @@
             }
             // Home section is already active by default in the HTML
             
-            // Hide password page
+            // Show main content immediately (it's behind video, will be revealed as video fades)
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.add('shown');
+            
+            // Fade out password box
             document.getElementById('passwordPage').classList.add('hidden');
             
-            // Reset mobile-specific styles before showing content
-            document.body.style.minHeight = '';
-            document.body.style.paddingBottom = '';
-            document.body.style.paddingTop = '';
-            document.body.style.overflow = '';
-            window.scrollTo(0, 0);
-            
-            // Trigger fade transitions for background
-            document.documentElement.classList.add('content-visible');
+            // Fade out video (content is already visible behind it)
             document.body.classList.add('content-visible');
-            document.querySelector('.container').classList.add('content-showing');
             
-            // Remove video from DOM after it fades out (2s fade + buffer)
+            // Remove video from DOM after it fades out
             setTimeout(() => {
               const videoBackground = document.querySelector('.video-background');
               if (videoBackground) {
                 videoBackground.remove();
               }
             }, 2500);
-            
-            // Show main content (but keep it transparent first)
-            const mainContent = document.getElementById('mainContent');
-            mainContent.classList.add('shown');
-            mainContent.style.opacity = '0';
-            
-            // Force reflow to ensure initial state is applied
-            void mainContent.offsetWidth;
-            
-            // Video height is handled by CSS using 100dvh - no JS manipulation needed
-            
-            // Now fade in the content
-            setTimeout(() => {
-              mainContent.style.opacity = '1';
-            }, 100);
             
             // Store success in session (not password)
             sessionStorage.setItem('authenticated', 'true');
